@@ -1,0 +1,152 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="AlertSettings"></jaspero-alerts>
+<div class="container-fluid">
+    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" *ngIf="tombol=='tambah'"><b>Tambah Data Resep</b></h4> 
+                    <h4 class="modal-title" *ngIf="tombol=='edit'"><b>Edit Data Resep</b></h4> 
+                </div>
+                <form (ngSubmit)="simpan()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-1"><b>SPH</b></div>
+                        <div class="col-md-1"><b>CYL</b></div>
+                        <div class="col-md-1"><b>AXS</b></div>
+                        <div class="col-md-1"><b>ADD</b></div>
+                        <div class="col-md-1"><b>MPD</b></div>
+                        <div class="col-md-1"><b>PV</b></div>
+                        <div class="col-md-1"><b>SH</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: right;"><b>R:</b></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_sph" name="r_sph"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_cyl" name="r_cyl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_axs" name="r_axs"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_add" name="r_add"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_mpd" name="r_mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_pv" name="r_pv"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_sh" name="r_sh"> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: right;"><b>L:</b></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_sph" name="l_sph"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_cyl" name="l_cyl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_axs" name="l_axs"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_add" name="l_add"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_mpd" name="l_mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_pv" name="l_pv"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_sh" name="l_sh"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <h3 align="center"><b>DATA RESEP</b></h3>
+                <button class="btn btn-success" (click)="tambah()"><i class="fa fa-plus"></i> Tambah Resep</button><br><br> <!-- data-toggle="modal" data-target="#responsive-modal"-->
+                <!-- <input type="text" class="form-control" placeholder="Cari Customer.." style="width: 50%;" (keyup)="cari()" [(ngModel)]="txtcari" name="txtcari"><br> -->
+                <table *ngIf="items[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Tgl Periksa</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2"></th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">SPH</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">RCYL</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PV</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">SH</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td (click)="edit(item)"><a>{{ item.created_at | date: 'dd-M-yyyy' }}</a></td>
+                            <td><b>R:<br>L:</b></td>
+                            <td>{{ item.r_sph }}<br>{{ item.l_sph }}</td>
+                            <td>{{ item.r_cyl }}<br>{{ item.l_cyl }}</td>
+                            <td>{{ item.r_axs }}<br>{{ item.l_axs }}</td>
+                            <td>{{ item.r_add }}<br>{{ item.l_add }}</td>
+                            <td>{{ item.r_mpd }}<br>{{ item.l_mpd }}</td>
+                            <td>{{ item.r_pv }}<br>{{ item.l_pv }}</td>
+                            <td>{{ item.r_sh }}<br>{{ item.l_sh }}</td>
+                            <td class="text-nowrap">
+                                <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger m-r-10"></i> </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA RESEP! ]</b></div>
+            </div>
+        </div>
+    </div>
+</div>

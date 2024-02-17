@@ -1,0 +1,446 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="AlertSettings"></jaspero-alerts>
+<div class="container-fluid">
+    <div id="showresep-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"><b>Pilih Data Resep</b></h4> 
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button class="btn btn-success" (click)="tambahresep()"><i class="fa fa-plus"></i> Tambah Resep</button>
+                        </div>
+                        <div class="col-md-9">
+                            <textarea class="form-control" [(ngModel)]="catatan" name="catatan" placeholder="catatan..."></textarea>
+                        </div>
+                    </div><br>
+                    <table *ngIf="resep[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
+                        <thead>
+                            <tr>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Tgl Periksa</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2"></th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">SPH</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">RCYL</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PV</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">SH</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let res of resep">
+                                <td><a>{{ res.created_at | date: 'dd-M-yyyy' }}</a></td>
+                                <td><b>R:<br>L:</b></td>
+                                <td>{{ res.r_sph }}<br>{{ res.l_sph }}</td>
+                                <td>{{ res.r_cyl }}<br>{{ res.l_cyl }}</td>
+                                <td>{{ res.r_axs }}<br>{{ res.l_axs }}</td>
+                                <td>{{ res.r_add }}<br>{{ res.l_add }}</td>
+                                <td>{{ res.r_mpd }}<br>{{ res.l_mpd }}</td>
+                                <td>{{ res.r_pv }}<br>{{ res.l_pv }}</td>
+                                <td>{{ res.r_sh }}<br>{{ res.l_sh }}</td>
+                                <td class="text-nowrap" *ngIf="statusresep != res.id">
+                                    <a data-toggle="tooltip" data-original-title="Edit" (click)="pilihresep(res)"> <i class="fa fa-check text-inverse m-r-10"></i> Pilih</a>
+                                </td>
+                                <td class="text-nowrap" *ngIf="statusresep == res.id" style="background-color: #25bf67; color: white;">
+                                    Aktif 
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="resep[0].id == null"><b>[ TIDAK ADA DATA RESEP! ]</b></div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div id="addresep-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"><b>Tambah Data Resep</b></h4> 
+                </div>
+                <form (ngSubmit)="simpanresep()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-1"><b>SPH</b></div>
+                        <div class="col-md-1"><b>CYL</b></div>
+                        <div class="col-md-1"><b>AXS</b></div>
+                        <div class="col-md-1"><b>ADD</b></div>
+                        <div class="col-md-1"><b>MPD</b></div>
+                        <div class="col-md-1"><b>PV</b></div>
+                        <div class="col-md-1"><b>SH</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: right;"><b>R:</b></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_sph" name="r_sph"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_cyl" name="r_cyl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_axs" name="r_axs"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_add" name="r_add"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_mpd" name="r_mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_pv" name="r_pv"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="r_sh" name="r_sh"> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2" style="text-align: right;"><b>L:</b></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_sph" name="l_sph"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_cyl" name="l_cyl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_axs" name="l_axs"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_add" name="l_add"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_mpd" name="l_mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_pv" name="l_pv"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="l_sh" name="l_sh"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning waves-effect" (click)="tampilresep()"><i class="fa fa-eye"></i> Tampil Resep</button>
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <div id="showcustomer-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"><b>Tambah Data Customer</b></h4> 
+                </div>
+                <form [formGroup]="customerForm" (ngSubmit)="onSubmitCustomer()">
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nama" class="control-label">Nama Customer</label>
+                            <input type="text" class="form-control" [(ngModel)]="nama" name="nama" formControlName="nama" [ngClass]="{ 'is-invalid': submitted && g.nama.errors }"> 
+                            <div *ngIf="submitted && g.nama.errors" class="invalid-feedback">
+                                <div *ngIf="g.nama.errors.required" style="color: red; font-style: italic;">Nama Wajib Diisi</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat" class="control-label">Alamat</label>
+                            <textarea class="form-control" [(ngModel)]="alamat" name="alamat" formControlName="alamat" [ngClass]="{ 'is-invalid': submitted && g.alamat.errors }"></textarea>
+                            <div *ngIf="submitted && g.alamat.errors" class="invalid-feedback">
+                                <div *ngIf="g.alamat.errors.required" style="color: red; font-style: italic;">Alamat Wajib Diisi</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notelp" class="control-label">No.Telp</label>
+                            <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && g.notelp.errors }"> 
+                            <div *ngIf="submitted && g.notelp.errors" class="invalid-feedback">
+                                <div *ngIf="g.notelp.errors.required" style="color: red; font-style: italic;">No.Telp Wajib Diisi</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggallahir" class="control-label">Tanggal Lahir</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggallahir" name="tanggallahir" formControlName="tanggallahir" [ngClass]="{ 'is-invalid': submitted && g.tanggallahir.errors }"> 
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-success waves-effect waves-light">Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div> 
+    <!-- /row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="white-box">
+                <h3 align="center" style="text-transform: uppercase;"><b>TAMBAH TRANSAKSI {{ jenis }}</b></h3>
+                <form [formGroup]="transaksiForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">Admin</label>
+                            <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">Sales</label>
+                            <select class="form-control" [(ngModel)]="id_karyawan" name="id_karyawan" formControlName="id_karyawan" [ngClass]="{ 'is-invalid': submitted && f.id_karyawan.errors }" (change)="tampilsales()">
+                                <option value="0" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">- Pilih Admin -</option>
+                                <option value="0" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">- Pilih Sales -</option>
+                                <option *ngFor="let emp of karyawan" value="{{ emp.id }}">{{ emp.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_karyawan.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_karyawan.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="jenis != 'kirimcabang'">
+                        <div class="form-group">
+                            <label for="status" class="control-label">Status Bayar</label>
+                            <select class="form-control" [(ngModel)]="status" name="status" formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }">
+                                <option value="lunas">Lunas</option>
+                                <option value="belum">Belum</option>
+                            </select>
+                            <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+                                <div *ngIf="f.status.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="jenis == 'pesan' || jenis =='grosir' || jenis == 'pembelian'">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pembelian'">Vendor</label>
+                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pesan' || jenis =='grosir'">Customer</label>
+                            <select class="form-control" [(ngModel)]="id_customer" name="id_customer" formControlName="id_customer" [ngClass]="{ 'is-invalid': submitted && f.id_customer.errors }" (change)="gantiresep()">
+                                <option *ngFor="let cust of customer" value="{{ cust.id }}">{{ cust.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_customer.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_customer.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br>
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pembelian' && level == 'admin'"><i class="fa fa-plus"></i> Tambah Vendor</a>
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="modalcustomer()"><i class="fa fa-plus"></i> Customer</a>&nbsp;
+                        <a class="btn btn-warning waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tampilresep()"><i class="fa fa-eye"></i> Pilih Resep</a>&nbsp;
+                        <a class="btn btn-success waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tambahresep()"><i class="fa fa-plus"></i> Resep</a>
+
+                    </div>
+                </div>
+                <div class="row" *ngIf="jenis == 'kirimcabang'">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_cabang" class="control-label">Toko Cabang</label>
+                            <select class="form-control" [(ngModel)]="id_cabang" name="id_cabang" formControlName="id_cabang" [ngClass]="{ 'is-invalid': submitted && f.id_cabang.errors }">
+                                <option *ngFor="let cab of cabang" value="{{ cab.id }}">{{ cab.nama }}</option>
+                            </select>
+                            <div *ngIf="submitted && f.id_cabang.errors" class="invalid-feedback">
+                                <div *ngIf="f.id_cabang.errors.required" style="color: red; font-style: italic;">
+                                    Wajib diisi!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br>
+                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'kirimcabang' && level == 'admin'"><i class="fa fa-plus"></i> Tambah Cabang</a>
+                    </div>
+                </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tanggaltransaksi" class="control-label">Tanggal Transaksi</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggaltransaksi" name="tanggaltransaksi" id="tanggaltransaksi">
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="hari" class="control-label">H+</label>
+                            <input type="text" class="form-control" [(ngModel)]="hari" name="hari" (keyup)="edithari()">
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="tanggalselesai" class="control-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggalselesai" name="tanggalselesai">
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="jamselesai" class="control-label">Jam</label>
+                            <input type="time" class="form-control" [(ngModel)]="jamselesai" name="jamselesai">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Cari Kode Produk.." (change)="caribarcode()" [(ngModel)]="kodeproduk" name="kodeproduk">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-success waves-effect waves-light"><i class="fa fa-briefcase"></i> Lihat Semua Produk</button>
+                    </div>
+                </div>
+                <h3 align="center" *ngIf="keranjang[0].id == null"><b>[ DAFTAR PRODUK MASIH KOSONG! ]</b></h3>
+                <h3 align="center" *ngIf="keranjang[0].id != null"><b>DAFTAR PRODUK</b></h3>
+                <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="keranjang[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist" style="text-align: center;">Nama/Seri</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2" style="text-align: center;">Merk</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3" style="text-align: center;">Harga</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3" style="text-align: center;">Disc (%)</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4" style="text-align: center;">Jumlah</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5" style="text-align: center;">Disc (Rp)</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" style="text-align: center;">Total</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="7" style="text-align: center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cart of keranjang; let i = index;">
+                            <td>{{ cart.produk.namaproduk }}</td>
+                            <td>{{ cart.produk.merk.nama }}</td>
+                            <td style="text-align: right;">{{ cart.harga | currency:"IDR":""}}</td>
+                            <td style="text-align: right;" *ngIf="cart.produk.diskon > 0">{{ cart.produk.diskon }} %</td>
+                            <td style="text-align: right;" *ngIf="cart.produk.diskon == 0">0</td>
+                            <td style="text-align: center;">
+                                <a (click)="decrement(i)"><i class="fa fa-minus"></i></a>&nbsp;&nbsp;
+                                {{ cart.jumlah }}&nbsp;&nbsp;
+                                <a (click)="increment(i)"><i class="fa fa-plus"></i></a>
+                            </td>
+                            <td style="text-align: center;">
+                                <!-- {{ cart.diskon | currency:"IDR":""}} -->
+                            <input type="text" id="diskon_{{ i }}" (change)="editdiskon(i)" value="{{ cart.diskon }}"> 
+                            </td>
+                            <td style="text-align: right;">{{ cart.total | currency:"IDR":""}}</td>
+                            <td style="text-align: center;">
+                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(cart)"> <i class="fa fa-close text-danger"></i> </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Total Belanja</b></td><td style="text-align: right;"><b>{{ totalbelanja | currency:"IDR":""}}</b></td>
+                        </tr>
+                        <tr >
+                            <td colspan="6" style="text-align: right;"><b>Total Diskon</b></td><td style="text-align: right;"><b>{{ totaldiskon | currency:"IDR":""}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Sub Total</b></td><td style="text-align: right;"><b>{{ subtotal | currency:"IDR":""}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Bayar / Uang Muka</b></td><td style="text-align: right;">
+                                <input type="text" class="form-control" [(ngModel)]="bayar" name="bayar" (keyup)="editbayar()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Metode Pembayaran</b></td><td style="text-align: right;">
+                                <select class="form-control" [(ngModel)]="metode" name="metode">
+                                    <option value="cash">Cash</option>
+                                    <option value="debit">Debit/Kredit</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Kembali</b></td><td style="text-align: right;"><b>{{ kembali | currency:"IDR":""}}</b></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;"><b>Sisa</b></td><td style="text-align: right;"><b>{{ sisa | currency:"IDR":""}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row" *ngIf="keranjang[0].id != null">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-lg btn-success waves-effect waves-light" (click)="onSubmit()">Simpan & Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="print-section" *ngIf="transaksi.length > 0" class="print-section" style="padding-left: 0; padding-right: 0;padding-top: 0; padding-bottom: 0;"> 
+    <table width="100%" *ngFor="let trans of transaksi">
+        <tr><td  colspan="5" style="text-align: center;"><ngx-barcode [bc-value]="trans.kodetransaksi" [bc-display-value]="false" [bc-width]="3.5"></ngx-barcode></td></tr>
+        <tr><td colspan="5" style="text-align: center; font-weight: bold; text-transform: uppercase;">{{ trans.profile.nama }}</td></tr>
+        <tr><td colspan="5" style="word-wrap: normal; text-align: center;">{{ trans.profile.alamat }} - {{ trans.profile.kota }}</td></tr>
+        <tr><td colspan="5" style="text-align: center;">Telp. {{ trans.profile.notelp }}</td></tr>
+        <tr><td colspan="5"><hr></td></tr>
+        <tr><td>No</td><td colspan="4" style="text-align: left;">: {{ trans.kodetransaksi }}</td></tr>
+        <tr><td>Rx</td><td colspan="4" style="text-align: left;">: {{ trans.karyawan.nama }}</td></tr>
+        <tr><td>Tgl.Purchase</td><td colspan="4" style="text-align: left;">: {{ trans.tanggaltransaksi | date: 'dd-M-yyyy' }}</td></tr>
+        <tr *ngIf="jenis == 'pesan'"><td>Tgl.Selesai</td><td colspan="4">: {{ trans.tanggalselesai | date: 'dd-M-yyyy' }}</td></tr>
+        <tr *ngIf="jenis == 'pesan'"><td>Jam</td><td colspan="4">: {{ trans.jamselesai }}</td></tr>
+        <tr *ngIf="jenis != 'retail'"><td colspan="5"><hr></td></tr>
+        <tr *ngIf="jenis != 'retail'"><td>Nama</td><td colspan="4">: {{ trans.customer.nama }}</td></tr>
+        <tr *ngIf="jenis != 'retail'"><td>Alamat</td><td colspan="4" style="word-wrap: normal;">: {{ trans.customer.alamat }}</td></tr>
+        <tr *ngIf="jenis != 'retail'"><td>Telp</td><td colspan="4">: {{ trans.customer.notelp }}</td></tr>
+        <tr><td colspan="5"><table width="100%">
+            <tr><td colspan="5"><hr></td></tr>
+            <tr style="font-weight: bold;"><td colspan="2">Keterangan</td><td>Harga</td><td>Disc</td><td>Jumlah</td></tr>
+            <tr><td colspan="5"><hr></td></tr>
+            <tr *ngFor="let item of trans.detailtransaksi">
+                <td colspan="2" style="word-wrap: normal;">{{ item.produk.namaproduk }}</td><td>{{ item.harga | currency:"IDR":""}}</td><td>{{ item.diskon | currency:"IDR":""}}</td><td>{{ item.total | currency:"IDR":""}}</td>
+            </tr>
+            <tr><td colspan="5"><hr></td></tr>
+            <tr><td colspan="2"></td><td colspan="2">SUB TOTAL</td><td>{{ trans.totalbelanja | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">DISKON</td><td>{{ trans.totaldiskon | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">BIAYA LAIN</td><td></td></tr>
+            <tr><td colspan="2"></td><td colspan="3"><hr></td></tr>
+            <tr><td colspan="2"></td><td colspan="2">TOTAL</td><td>{{ trans.subtotal | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">DP/BAYAR</td><td>{{ trans.bayar | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">SISA</td><td>{{ trans.sisa | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">KEMBALI</td><td>{{ trans.kembali | currency:"IDR":""}}</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">Anda Hemat</td><td></td></tr>
+        </table></td></tr>
+        <tr><td colspan="5"><hr></td></tr>
+        <tr><td colspan="5" style="text-align: center;">TERIMA KASIH</td></tr>
+        <tr><td colspan="5">* Barang yang sudah dibeli tidak dapat ditukar / dikembalikan, uang muka tidak dapat dikembalikan.<br>* Barang yang tidak diambil setelah 3 bulan diluar tanggung jawab kami.<br>* Tidak ada penggantian frame rusak saat ganti lensa untuk frame yang tidak di beli di Optik Kustin<br>* Kritik dan saran hub. 0813 7757 2015</td></tr>
+    </table>
+</div>
+<button 
+[printStyle]="{table : {'font-family':'Arial Narrow','font-size':'10'}, p : {'font-family':'Arial Narrow','font-size':'12'}}"
+printSectionId="print-section" ngxPrint id="tb_print">print</button> 

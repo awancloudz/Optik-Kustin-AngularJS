@@ -1,0 +1,168 @@
+<ngx-spinner></ngx-spinner>
+<jaspero-alerts [defaultSettings]="AlertSettings"></jaspero-alerts>
+<div class="container-fluid">
+    <!-- /row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 style="text-transform: uppercase;"><b>DATA LAPORAN {{ jenis }}</b></h3>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 style="text-transform: uppercase;"><b>PENDAPATAN : 
+                            <i><font color="#25bf67">{{ omzet | currency:"IDR":""}}</font></i>
+                        </b></h3>
+                        <h3 style="text-transform: uppercase;"><b>DEBIT/KREDIT : 
+                            <i><font color="#25bf67">{{ debit | currency:"IDR":""}}</font></i>
+                        </b></h3>
+                        <h3 style="text-transform: uppercase;"><b>TUNAI : 
+                            <i><font color="#25bf67">{{ cash | currency:"IDR":""}}</font></i>
+                        </b></h3>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6" *ngIf="level == 'admin'">
+                        <div class="form-group">
+                            <label for="id_cabang" class="control-label">Toko Cabang</label>
+                            <select class="form-control" [(ngModel)]="id_cabang" name="id_cabang" (change)="tampilcustom()">
+                                <option value="0">Semua Toko</option>
+                                <option *ngFor="let cab of cabang" value="{{ cab.id }}">{{ cab.nama }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="status" class="control-label">Pembayaran</label>
+                            <select class="form-control" [(ngModel)]="status" name="status" (change)="tampilcustom()">
+                                <option value="lunas">Lunas</option>
+                                <option value="belum">Belum</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="jenis == 'pesan'">
+                        <div class="form-group">
+                            <label for="statustransaksi" class="control-label">Pengambilan</label>
+                            <select class="form-control" [(ngModel)]="statustransaksi" name="statustransaksi" (change)="tampilcustom()">
+                                <option value="sudah">Sudah Diambil</option>
+                                <option value="belum">Belum Diambil</option>
+                                <option value="batal">Batal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="level == 'sales'">
+                        <div class="form-group"><br>
+                            <button 
+                                [printStyle]="{table : {'font-family':'Arial Narrow','font-size':'10'}, p : {'font-family':'Arial Narrow','font-size':'12'}}"
+                                class="btn btn-primary" printSectionId="print-section" ngxPrint id="tb_print">Cetak Lap.Harian</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="level == 'admin'">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="periode" class="control-label">Periode</label>
+                            <select class="form-control" [(ngModel)]="periode" name="periode" id="periode" (change)="tampilperiode()">
+                                <option value="1">Hari Ini</option>
+                                <option value="2">Kemarin</option>
+                                <option value="3">7 Hari Terakhir</option>
+                                <option value="4">Bulan Ini</option>
+                                <option value="5">Bulan Lalu</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tanggaltransaksi" class="control-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggalmulai" name="tanggalmulai" id="tanggalmulai">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tanggaltransaksi" class="control-label">Tanggal Selesai</label>
+                            <input type="date" class="form-control" [(ngModel)]="tanggalselesai" name="tanggalselesai" id="tanggalselesai">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group"><br>
+                            <button class="btn btn-success" (click)="tampilcustom()">Show</button>&nbsp;
+                            <button class="btn btn-primary" (click)="cetak()">Cetak</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="print-section tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Kode</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Tanggal</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Belanja</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Diskon</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">Total</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">Bayar</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" *ngIf="jenis == 'pesan'">Ambil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td><a>{{ item.kodetransaksi }}</a></td>
+                            <td>{{ item.tanggaltransaksi | date: 'dd-M-yyyy'}}</td>
+                            <td>{{ item.totalbelanja | currency:"IDR":""}}</td>
+                            <td>{{ item.totaldiskon | currency:"IDR":""}}</td>
+                            <td>{{ item.subtotal | currency:"IDR":""}}</td>
+                            <!-- <td style="text-transform: uppercase;" *ngIf="item.statustransaksi == 'batal'">BATAL</td> -->
+                            <td style="text-transform: uppercase;" *ngIf="item.bayar > 0 && item.bayar < item.subtotal">DP({{ item.bayar | currency:"IDR":""}})</td>
+                            <td style="text-transform: uppercase;" *ngIf="item.bayar == item.subtotal || item.sisa == item.subtotal || item.sisa == 0">{{ item.status }}</td>
+                            <td *ngIf="jenis == 'pesan'" style="text-transform: uppercase;">{{ item.statustransaksi }}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                <div *ngIf="items[0].id == null"><b>[ TIDAK ADA DATA LAPORAN! ]</b></div>
+            </div>
+        </div>
+    </div>
+</div><br><br><br><br><br><br><br><br>
+<div id="print-section" class="print-section" *ngIf="items[0].id != null" style="padding-left: 0; padding-right: 0;padding-top: 0; padding-bottom: 0;">
+    <p *ngFor="let cab of pengguna"><b>Tanggal: {{ hariini | date: 'dd-M-yyyy'}}</b><br>
+        <b>Cabang: {{ cab.profile.nama }}</b><br>
+        <b>Transaksi: {{ jenis }}</b>
+    </p>
+    <table width="100%">
+        <thead>
+            <tr>
+                <td><b>No.Nota</b></td>
+                <td><b>Jumlah</b></td>
+                <td><b>Payment</b></td>
+                <!-- <td><b>Bayar/DP</b></td> -->
+                <td><b>Sisa</b></td>
+                <td *ngIf="jenis == 'pesan'"><b>Ambil</b></td>
+            </tr>
+            <tr><td colspan="5"><hr></td></tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of items">
+                <td><a>{{ item.kodetransaksi }}</a></td>
+                <td>{{ item.subtotal | currency:"IDR":""}}</td>
+                <td style="text-transform: uppercase;"><a>{{ item.metode }}</a></td>
+                <!-- <td>{{ item.bayar | currency:"IDR":""}}</td> -->
+                <td>{{ item.sisa | currency:"IDR":""}}</td>
+                <!-- <td style="text-transform: uppercase;" *ngIf="item.statustransaksi == 'batal'">BATAL</td>
+                <td style="text-transform: uppercase;" *ngIf="item.bayar > 0 && item.bayar < item.subtotal">DP({{ item.bayar | currency:"IDR":""}})</td>
+                <td style="text-transform: uppercase;" *ngIf="item.bayar == item.subtotal || item.sisa == item.subtotal || item.sisa == 0">{{ item.status }}</td> -->
+                <td *ngIf="jenis == 'pesan'" style="text-transform: uppercase;">{{ item.statustransaksi }}</td>
+            </tr>
+            <tr><td colspan="5"><hr></td></tr>
+            <tr>
+                <td colspan="4" align="right"><b>JUMLAH</b></td><td> : {{ omzet | currency:"IDR":""}}</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right"><b>DEBIT/KREDIT</b></td><td> : {{ debit | currency:"IDR":""}}</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right"><b>TUNAI</b></td><td> : {{ cash | currency:"IDR":""}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
