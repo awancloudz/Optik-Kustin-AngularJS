@@ -12,17 +12,21 @@
                 <form (ngSubmit)="simpan()">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-2"></div>
+                        <div class="col-md-1"></div>
                         <div class="col-md-1"><b>SPH</b></div>
                         <div class="col-md-1"><b>CYL</b></div>
                         <div class="col-md-1"><b>AXS</b></div>
                         <div class="col-md-1"><b>ADD</b></div>
+                        <div class="col-md-1"><b>PD</b></div>
+                        <div class="col-md-1"><b>Vis Akhir</b></div>
+                        <div class="col-md-1"><b>A</b></div>
+                        <div class="col-md-1"><b>B</b></div>
+                        <div class="col-md-1"><b>DBL</b></div>
                         <div class="col-md-1"><b>MPD</b></div>
-                        <div class="col-md-1"><b>PV</b></div>
-                        <div class="col-md-1"><b>SH</b></div>
+                        <div class="col-md-1"><b>SH/PV</b></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2" style="text-align: right;"><b>R:</b></div>
+                        <div class="col-md-1"><b>R:</b></div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="r_sph" name="r_sph"> 
@@ -42,25 +46,45 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="r_add" name="r_add"> 
                             </div>
-                        </div>
+                        </div>  
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_mpd" name="r_mpd"> 
+                                <input type="text" class="form-control" [(ngModel)]="pd" name="pd"> 
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_pv" name="r_pv"> 
+                                <input type="text" class="form-control" [(ngModel)]="visakhir" name="visakhir"> 
+                            </div>
+                        </div> 
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="A" name="A"> 
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_sh" name="r_sh"> 
+                                <input type="text" class="form-control" [(ngModel)]="B" name="B"> 
                             </div>
                         </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="dbl" name="dbl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="mpd" name="mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="shpv" name="shpv"> 
+                            </div>
+                        </div>                                             
                     </div>
                     <div class="row">
-                        <div class="col-md-2" style="text-align: right;"><b>L:</b></div>
+                        <div class="col-md-1"><b>L:</b></div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="l_sph" name="l_sph"> 
@@ -81,19 +105,42 @@
                                 <input type="text" class="form-control" [(ngModel)]="l_add" name="l_add"> 
                             </div>
                         </div>
-                        <div class="col-md-1">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_mpd" name="l_mpd"> 
+                                <label for="jenisframe">Jenis Frame</label>
+                                <input type="text" class="form-control" [(ngModel)]="jenisframe" name="jenisframe"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="koridor">Koridor</label>
+                                <input type="text" class="form-control" [(ngModel)]="koridor" name="koridor"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="visusbalance">Visus Balancing</label>
+                                <input type="text" class="form-control" [(ngModel)]="visusbalance" name="visusbalance"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="dukeelder">Duke Elder</label>
+                                <input type="text" class="form-control" [(ngModel)]="dukeelder" name="dukeelder"> 
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_pv" name="l_pv"> 
+                                <label for="wrapangle">Wrap Angle</label>
+                                <input type="text" class="form-control" [(ngModel)]="wrapangle" name="wrapangle"> 
                             </div>
-                        </div>
-                        <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_sh" name="l_sh"> 
+                                <label for="pantoskopik">Pantoskopik</label>
+                                <input type="text" class="form-control" [(ngModel)]="pantoskopik" name="pantoskopik"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="vertexdistance">Vertex Distance</label>
+                                <input type="text" class="form-control" [(ngModel)]="vertexdistance" name="vertexdistance"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="catatan">Catatan</label>
+                                <input type="text" class="form-control" [(ngModel)]="catatan" name="catatan"> 
                             </div>
                         </div>
                     </div>
@@ -121,9 +168,8 @@
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">RCYL</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PV</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">SH</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PD</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Vis AKhir</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
                         </tr>
                     </thead>
@@ -135,9 +181,8 @@
                             <td>{{ item.r_cyl }}<br>{{ item.l_cyl }}</td>
                             <td>{{ item.r_axs }}<br>{{ item.l_axs }}</td>
                             <td>{{ item.r_add }}<br>{{ item.l_add }}</td>
-                            <td>{{ item.r_mpd }}<br>{{ item.l_mpd }}</td>
-                            <td>{{ item.r_pv }}<br>{{ item.l_pv }}</td>
-                            <td>{{ item.r_sh }}<br>{{ item.l_sh }}</td>
+                            <td>{{ item.pd }}</td>
+                            <td>{{ item.visakhir }}</td>
                             <td class="text-nowrap">
                                 <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                                 <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-close text-danger m-r-10"></i> </a>

@@ -94,7 +94,7 @@ export class TransaksiComponent implements OnInit {
     if(this.level == 'admin'){
       this.tampiltransaksi();
     }
-    else if((this.level == 'sales') && ((this.jenis == 'pesan') || (this.jenis == 'grosir') || (this.jenis == 'retail'))){
+    else if((this.level == 'sales') && ((this.jenis == 'pesan') || (this.jenis == 'grosir') || (this.jenis == 'retail') || (this.jenis == 'suratorder'))){
       this.tampiltransaksi();
     }
     else{
@@ -121,6 +121,7 @@ export class TransaksiComponent implements OnInit {
         { path: 'profile', component: CabangUtamaComponent },
         { path: 'transaksi/:jenis', component: TransaksiComponent},
         { path: 'transaksi/view/:idtrans', component: TransaksiViewComponent},
+        { path: 'transaksi/so/:jenis/:idtrans', component: TransaksiSOComponent},
         { path: 'transaksi/add/:jenis', component: TransaksiAddComponent},
         { path: 'notfound', component: HomeNotfoundComponent },
         { path: 'laporan/:jenis', component: LaporanComponent},
@@ -147,19 +148,37 @@ export class TransaksiComponent implements OnInit {
 
   cari(){
     //this.spinner.show();
-    this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode)).subscribe(
-      //Jika data sudah berhasil di load
-      (data:TransaksiArray[])=>{
-        this.items=data;
-        //this.spinner.hide();
-      },
-      //Jika Error
-      function (error){   
-      },
-      //Tutup Loading
-      function(){
-      }
-    );
+    if(this.jenis == 'suratorder'){
+      var jenisso = 'pesan';
+      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,jenisso,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode)).subscribe(
+        //Jika data sudah berhasil di load
+        (data:TransaksiArray[])=>{
+          this.items=data;
+          //this.spinner.hide();
+        },
+        //Jika Error
+        function (error){   
+        },
+        //Tutup Loading
+        function(){
+        }
+      );
+    }
+    else{
+      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode)).subscribe(
+        //Jika data sudah berhasil di load
+        (data:TransaksiArray[])=>{
+          this.items=data;
+          //this.spinner.hide();
+        },
+        //Jika Error
+        function (error){   
+        },
+        //Tutup Loading
+        function(){
+        }
+      );
+    }
   }
 
   hapus(item){
@@ -229,9 +248,38 @@ export class TransaksiComponent implements OnInit {
     this._alert.create(type, judul, pesan, this.AlertSettings);
   }
 
-  cetak(item){
-    
+  cetakstruk(id){
+    this.transaksiservice.showsuratorder(id).subscribe(
+      //Jika data sudah berhasil di load
+      (data:TransaksiArray[])=>{
+        //kirim request ke printer server
+        this.transaksiservice.cetaksuratorder(data)
+        .subscribe(
+          (data)=>{
+            console.log(data);
+            this.open('success','Data Transaksi','Cetak Sukses!');
+            this.spinner.hide();
+            setTimeout(() => {
+              this.router.navigateByUrl('transaksi/suratorder');
+            },3000);
+          },
+          function(error){
+            this.open('error','Data Transaksi','Cetak Gagal!');
+            this.spinner.hide();
+          },
+          function(){}
+        );
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
   }
+
 }
 
 @Component({
@@ -404,18 +452,32 @@ export class TransaksiAddComponent implements OnInit {
   l_axs:Number;
   r_add:Number; 
   l_add:Number; 
-  r_mpd:Number; 
-  l_mpd:Number; 
-  r_pv:Number; 
-  l_pv:Number;
-  r_sh:Number; 
-  l_sh:Number; 
-  
+  pd:Number; 
+  visakhir:Number;
+  A:Number; 
+  B:Number; 
+  dbl:Number;
+  mpd:Number; 
+  shpv:Number;
+  jenisframe:String;
+  koridor:String;
+  visusbalance:String;
+  dukeelder:String;
+  wrapangle:String;
+  pantoskopik:String;
+  vertexdistance:String;
+
   //Variabel Customer
+  cariidcustomer:String;
+  carinohandphone:String;
+
+  kodecustomer:String;
   nama:String;
   alamat:String;
   notelp:String;
   tanggallahir:String;
+  umur:String;
+  jeniskelamin:String;
 
   loginstatus = localStorage.getItem('loginstatus');
   level:String;
@@ -463,6 +525,8 @@ export class TransaksiAddComponent implements OnInit {
       id_customer: ['1', Validators.required],
       id_cabang: ['', Validators.nullValidator],
       status: ['', Validators.nullValidator],
+      cariidcustomer: ['', Validators.nullValidator],
+      carinohandphone: ['', Validators.nullValidator],
       //tanggaltransaksi : new FormControl((new Date()).toISOString().substring(0,10)),
     });
     this.tanggallahir = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
@@ -470,18 +534,22 @@ export class TransaksiAddComponent implements OnInit {
       nama: ['', Validators.required],
       alamat: ['', Validators.required],
       notelp: ['', [Validators.required]],
-      tanggallahir: ['', [Validators.nullValidator]]
+      tanggallahir: ['', [Validators.nullValidator]],
+      umur: ['', [Validators.nullValidator]],
+      jeniskelamin: ['', [Validators.nullValidator]]
     });
     //Tampil Dropdown by Transaksi
     this.tampilsales();
     this.id_karyawan = 0;
+    //$(".id_karyawan").select2();
+    
     if(this.jenis == 'pembelian'){
       this.tampildistributor();
       this.statustransaksi = "sudah";
     }
     else if((this.jenis == 'pesan') || (this.jenis == 'grosir')){
       this.tampilcustomer();
-      this.status = "belum";
+      this.status = "belum"      
     }
     else if(this.jenis == 'kirimcabang'){
       this.tampilcabang();
@@ -506,7 +574,6 @@ export class TransaksiAddComponent implements OnInit {
     $('#print-section').hide();
     $('#tb_print').hide();
     this.spinner.hide();
-
   }
 
   //TRANSAKSI
@@ -863,7 +930,10 @@ export class TransaksiAddComponent implements OnInit {
         (data)=>{
           this.open('success','Data Transaksi','Simpan Data Sukses!');
           this.spinner.hide();
-          this.cetakstruk(data.id);
+          this.kirimwa(data.id);
+          setTimeout(() => {
+            this.router.navigateByUrl('transaksi/'+this.jenis);
+          },3000);
         },
         function(error){
           this.open('error','Data Transaksi','Simpan Data Gagal!');
@@ -875,15 +945,27 @@ export class TransaksiAddComponent implements OnInit {
       );
   }
 
-  cetakstruk(id){
-    this.transaksiservice.showdetailtransaksi(id).subscribe(
+  kirimwa(id){
+    this.transaksiservice.showsuratorder(id).subscribe(
       //Jika data sudah berhasil di load
       (data:TransaksiArray[])=>{
-        this.transaksi=data;
-        setTimeout(() => {
-          $('#tb_print').click();
-          this.router.navigateByUrl('transaksi/'+this.jenis);
-        },2500);
+        //kirim request ke printer server
+        this.transaksiservice.kirimwaorder(data)
+        .subscribe(
+          (data)=>{
+            console.log(data);
+            this.open('success','Data Transaksi','Cetak Sukses!');
+            this.spinner.hide();
+            setTimeout(() => {
+              this.router.navigateByUrl('transaksi/'+this.jenis);
+            },3000);
+          },
+          function(error){
+            this.open('error','Data Transaksi','Cetak Gagal!');
+            this.spinner.hide();
+          },
+          function(){}
+        );
       },
       //Jika Error
       function (error){   
@@ -898,6 +980,104 @@ export class TransaksiAddComponent implements OnInit {
   //CUSTOMER
   modalcustomer(){
     $('#showcustomer-modal').modal('show');
+    this.hitungumur();
+    this.jeniskelamin = "0";
+  }
+
+  cariidmember(){
+    if(this.cariidcustomer!=''){
+      this.customerservice.searchidmember(new CustomerArray(this.id,this.cariidcustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur, this.jeniskelamin)).subscribe(
+        //Jika data sudah berhasil di load
+        (data:CustomerArray[])=>{
+          this.id_customer = data[0].id;
+          this.carinohandphone = data[0].notelp
+        },
+        //Jika Error
+        function (error){   
+        },
+        //Tutup Loading
+        function(){
+        }
+      );
+    }
+  }
+
+  carinohp(){
+    if(this.carinohandphone!=''){
+      this.customerservice.searchnohp(new CustomerArray(this.id,this.cariidcustomer,this.nama,this.alamat,this.carinohandphone,this.jenis,this.tanggallahir,this.umur, this.jeniskelamin)).subscribe(
+        //Jika data sudah berhasil di load
+        (data:CustomerArray[])=>{
+          this.id_customer = data[0].id;
+          this.cariidcustomer = data[0].kodecustomer
+        },
+        //Jika Error
+        function (error){   
+        },
+        //Tutup Loading
+        function(){
+        }
+      );
+    }
+  }
+
+  verifikasinohp(){
+    if(this.notelp!=''){
+      this.customerservice.searchnohp(new CustomerArray(this.id,this.cariidcustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur, this.jeniskelamin)).subscribe(
+        //Jika data sudah berhasil di load
+        (data:CustomerArray[])=>{
+          if(data[0].id != null){
+            alert("No.Telp sudah ada!");
+            this.notelp = '';
+          }
+        },
+        //Jika Error
+        function (error){   
+        },
+        //Tutup Loading
+        function(){
+        }
+      );
+    }
+  }
+
+  hitungumur(){
+    function hitungUmur(tanggalLahir: Date): string {
+      const sekarang = new Date();
+      const tahunSekarang = sekarang.getFullYear();
+      const bulanSekarang = sekarang.getMonth() + 1;
+      const hariSekarang = sekarang.getDate();
+  
+      const tahunLahir = tanggalLahir.getFullYear();
+      const bulanLahir = tanggalLahir.getMonth() + 1;
+      const hariLahir = tanggalLahir.getDate();
+  
+      let umurTahun = tahunSekarang - tahunLahir;
+      let umurBulan = bulanSekarang - bulanLahir;
+      let umurHari = hariSekarang - hariLahir;
+  
+      if (umurBulan < 0 || (umurBulan === 0 && umurHari < 0)) {
+          umurTahun--;
+          umurBulan += 12;
+      }
+  
+      if (umurHari < 0) {
+          const bulanSebelumnya = bulanSekarang === 1 ? 12 : bulanSekarang - 1;
+          const tahunSebelumnya = bulanSekarang === 1 ? tahunSekarang - 1 : tahunSekarang;
+          const hariBulanSebelumnya = new Date(tahunSebelumnya, bulanSebelumnya, 0).getDate();
+          umurHari += hariBulanSebelumnya;
+          umurBulan--;
+      }
+  
+      return `${umurTahun} tahun ${umurBulan} bulan ${umurHari} hari`;
+    }
+  
+    function convertStringToDate(dateString: String): Date {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    }
+  
+    const tgllahir = convertStringToDate(this.tanggallahir);
+    this.umur = hitungUmur(tgllahir);
   }
 
   get g() { return this.customerForm.controls; }
@@ -914,7 +1094,7 @@ export class TransaksiAddComponent implements OnInit {
     this.spinner.show();
     var jenislama = this.jenis;
     this.jenis = "customer";
-    this.customerservice.savecustomer(new CustomerArray(this.id,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir))
+    this.customerservice.savecustomer(new CustomerArray(this.id,this.kodecustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur,this.jeniskelamin))
     .subscribe(
       (data)=>{
         this.open('success','Data Customer','Simpan Data Sukses!');
@@ -987,18 +1167,527 @@ export class TransaksiAddComponent implements OnInit {
     this.l_axs = 0;
     this.r_add = 0;
     this.l_add = 0;
-    this.r_mpd = 0;
-    this.l_mpd = 0;
-    this.r_pv = 0;
-    this.l_pv = 0;
-    this.r_sh = 0;
-    this.l_sh = 0;
+    this.pd = 0;
+    this.visakhir = 0;
+    this.A = 0;
+    this.B = 0;
+    this.dbl = 0;
+    this.mpd = 0;
+    this.shpv = 0;
+    this.jenisframe = '';
+    this.koridor = '';
+    this.visusbalance = '';
+    this.dukeelder = '';
+    this.wrapangle = '';
+    this.pantoskopik = '';
+    this.vertexdistance = '';
+    this.catatan = '';
   }
 
   simpanresep(){
     $('#addresep-modal').modal('hide');
     this.spinner.show();
-    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.r_mpd,this.l_mpd,this.r_pv,this.l_pv,this.r_sh,this.l_sh))
+    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
+    .subscribe(
+      (data:ResepArray[])=>{
+        this.spinner.hide();
+        this.open('success','Data Resep','Simpan Data Sukses!');
+        setTimeout(() => {
+          this.tampilresep();
+        },3000);
+      },
+      function(error){
+        this.spinner.hide();
+        this.open('error','Data Resep','Simpan Data Gagal!');
+        $('#addresep-modal').modal('hide');
+      },
+      function(){
+      }
+    );
+  }
+
+  gantiresep(){
+    this.statusresep = 0;
+  }
+
+  open(type,judul,pesan) {
+    this._alert.create(type, judul, pesan, this.AlertSettings);
+  }
+}
+
+@Component({
+  selector: 'app-transaksi',
+  templateUrl: './transaksi-so.component.html',
+  styleUrls: ['./transaksi.component.css'],
+})
+export class TransaksiSOComponent implements OnInit {
+  transaksi:TransaksiArray[]=[];
+  keranjang:KeranjangArray[]=[];
+  pengguna:PenggunaArray[]=[];
+  karyawan:KaryawanArray[]=[];
+  customer:CustomerArray[]=[];
+  cabang:CabangArray[]=[];
+  produk:StokPusatArray[]=[];
+  resep:ResepArray[]=[];
+
+  //Variabel master
+  id_cabang:any;
+  jenis:any;
+
+  //Variabel keranjang
+  id_produk:any;
+  harga:any;
+  jumlah:Number;
+  total:Number;
+
+  //Variabel Produk
+  kodeproduk:any;  
+  id_kategoriproduk:any;
+  id_merk:any;
+  namaproduk:any;
+  seriproduk:any;
+
+  hargajual:any;
+  hargagrosir:any;
+  hargadistributor:any;
+  diskon:any;
+  stok:any;
+  foto:any;
+
+  //Variabel Transaksi
+  id:Number; 
+  hari;
+  kodetransaksi:String; 
+  jenistransaksi:String; 
+  tanggaltransaksi;
+  jamtransaksi:String; 
+  tanggalselesai; 
+  jamselesai:String; 
+  id_customer:Number;
+  id_profile:Number; 
+  id_karyawan:Number; 
+  totaldiskon:Number; 
+  totalbelanja:Number;
+  asuransi:Number; 
+  subtotal:Number; 
+  bayar:Number; 
+  kembali:Number; 
+  sisa:Number;
+  catatan:String; 
+  status:String; 
+  statustoko:String;
+  statustransaksi:String;
+  statusresep:Number;
+  metode:String;
+  //Variabel Resep
+  r_sph:Number; 
+  l_sph:Number; 
+  r_cyl:Number; 
+  l_cyl:Number; 
+  r_axs:Number; 
+  l_axs:Number;
+  r_add:Number; 
+  l_add:Number; 
+  pd:Number; 
+  visakhir:Number;
+  A:Number; 
+  B:Number; 
+  dbl:Number;
+  mpd:Number; 
+  shpv:Number; 
+  jenisframe:String;
+  koridor:String;
+  visusbalance:String;
+  dukeelder:String;
+  wrapangle:String;
+  pantoskopik:String;
+  vertexdistance:String;
+
+  //Variabel Customer
+  kodecustomer:String;
+  nama:String;
+  alamat:String;
+  notelp:String;
+  tanggallahir:String;
+  umur:String;
+  jeniskelamin:String;
+
+  loginstatus = localStorage.getItem('loginstatus');
+  level:String;
+  transaksiForm: FormGroup;
+  customerForm: FormGroup;
+  submitted = false;
+
+  AlertSettings = {
+    overlay: true,
+    overlayClickToClose: true,
+    showCloseButton: false,
+    duration: 2000
+  };
+
+  constructor(private datePipe: DatePipe,public route:ActivatedRoute, public router:Router,public transaksiservice:TransaksiService, public stokpusatservice:StokPusatService, 
+    public karyawanservice:KaryawanService, public customerservice:CustomerService, public distributorservice:DistributorService,
+    public cabangservice:CabangService, private spinner: NgxSpinnerService, private formBuilder: FormBuilder, private _alert: AlertsService,
+    ){
+
+  }
+  ngOnInit(){
+    window.scrollTo(0, 0);
+    this.spinner.show();
+    this.jenis = this.route.snapshot.paramMap.get('jenis');
+    this.pengguna = JSON.parse(localStorage.getItem("profileuser"));
+    this.statustoko = JSON.parse(localStorage.getItem("profileuser"))[0].profile.statustoko;
+    this.id_profile = JSON.parse(localStorage.getItem("profileuser"))[0].profile.id;
+    this.status = "lunas";
+    this.metode = "cash";
+    //Verifikasi Level
+    if(this.pengguna.length > 0){
+      this.level = this.pengguna[0].level;
+    }
+    if(this.level == 'admin'){
+    }
+    else if((this.level == 'sales') && ((this.jenis == 'pesan') || (this.jenis == 'grosir') || (this.jenis == 'retail'))){
+    }
+    else{
+      this.router.navigateByUrl('notfound');
+    }
+    
+    //Validator Awal
+    this.transaksiForm = this.formBuilder.group({
+      id_karyawan: ['0', Validators.required],
+      id_customer: ['1', Validators.required],
+      id_cabang: ['', Validators.nullValidator],
+      status: ['', Validators.nullValidator],
+      //tanggaltransaksi : new FormControl((new Date()).toISOString().substring(0,10)),
+    });
+    this.tanggallahir = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.customerForm = this.formBuilder.group({
+      nama: ['', Validators.required],
+      alamat: ['', Validators.required],
+      notelp: ['', [Validators.required]],
+      tanggallahir: ['', [Validators.nullValidator]]
+    });
+    //Tampil Dropdown by Transaksi
+    this.tampilsales();
+    //this.id_karyawan = 0;
+    if(this.jenis == 'pembelian'){
+      this.tampildistributor();
+      this.statustransaksi = "sudah";
+    }
+    else if((this.jenis == 'pesan') || (this.jenis == 'grosir')){
+      this.tampilcustomer();
+      this.status = "belum";
+    }
+    else if(this.jenis == 'kirimcabang'){
+      this.tampilcabang();
+      this.id_customer = 1;
+      this.statustransaksi = "sudah";
+    }
+    else if(this.jenis == 'retail'){
+      this.id_customer = 1;
+      this.statustransaksi = "sudah";
+    }
+
+    this.resepquery();
+
+    //this.tanggaltransaksi = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    //this.tanggaltransaksi = new Date().toISOString().substring(0,10);
+    this.tanggaltransaksi = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.hari = 1;
+    let selesai = new Date();
+    let plus = Number(this.hari);
+    selesai.setDate(selesai.getDate()+plus);
+    this.tanggalselesai = this.datePipe.transform(selesai, 'yyyy-MM-dd');
+    $('#print-section').hide();
+    $('#tb_print').hide();
+    this.spinner.hide();
+
+  }
+
+  //TRANSAKSI
+  tampilsales(){
+    this.karyawanservice.showkaryawan().subscribe(
+      //Jika data sudah berhasil di load
+      (data:KaryawanArray[])=>{
+        this.karyawan=data;
+        if(data.length > 0){
+          //Tampil keranjang
+          this.tampilkeranjang();
+        }
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  tampilcustomer(){
+    this.customerservice.showcustomer().subscribe(
+      //Jika data sudah berhasil di load
+      (data:CustomerArray[])=>{
+        this.customer=data;
+        if(data.length > 0){
+          this.id_customer = data[0].id;
+        }
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  tampildistributor(){
+    this.distributorservice.showdistributor().subscribe(
+      //Jika data sudah berhasil di load
+      (data:CustomerArray[])=>{
+        this.customer=data;
+        if(data.length > 0){
+          this.id_customer = data[0].id;
+        }
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  tampilcabang(){
+    this.cabangservice.showcabang().subscribe(
+      //Jika data sudah berhasil di load
+      (data:CabangArray[])=>{
+        this.cabang=data;
+        if(data.length > 0){
+          this.id_cabang = data[0].id;
+        }
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  tampilkeranjang(){
+    var idtrans = this.route.snapshot.paramMap.get('idtrans');
+    this.id = parseInt(idtrans);
+    this.transaksiservice.showdetailtransaksi(idtrans).subscribe(
+      //Jika data sudah berhasil di load
+      (data2:KeranjangArray[])=>{
+        this.keranjang=data2[0]['detailtransaksi'];
+        this.totaldiskon = data2[0]['totaldiskon'];
+        this.totalbelanja = data2[0]['totalbelanja'];
+        this.subtotal = data2[0]['subtotal'];
+        this.kembali = data2[0]['kembali'];
+        this.sisa = data2[0]['sisa'];
+        this.bayar = data2[0]['bayar'];
+        this.metode = data2[0]['metode'];
+        this.id_karyawan = data2[0]['id_karyawan'];
+        this.status = data2[0]['status'];
+        this.id_customer = data2[0]['id_customer'];
+        this.tanggaltransaksi = data2[0]['tanggaltransaksi'];
+        this.tanggalselesai = data2[0]['tanggalselesai'];
+        this.jamselesai = data2[0]['jamselesai'];
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  get f() { return this.transaksiForm.controls; }
+
+  onSubmit() {
+    this.submitted = true;
+    if (this.transaksiForm.invalid) {
+      return;
+    }
+    this.simpan();
+  }
+
+  simpan(){
+    this.spinner.show();
+    //Simpan Resep
+    this.transaksiservice.updatetransaksi(new TransaksiArray(this.id,this.kodetransaksi,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode))
+      .subscribe(
+        (data)=>{
+          this.open('success','Data Transaksi','Simpan Data Sukses!');
+          this.spinner.hide();
+          this.cetakstruk(data.id);
+        },
+        function(error){
+          this.open('error','Data Transaksi','Simpan Data Gagal!');
+          this.spinner.hide();
+        },
+        function(){
+  
+        }
+      );
+  }
+
+  cetakstruk(id){
+    this.transaksiservice.showsuratorder(id).subscribe(
+      //Jika data sudah berhasil di load
+      (data:TransaksiArray[])=>{
+        //kirim request ke printer server
+        this.transaksiservice.cetaksuratorder(data)
+        .subscribe(
+          (data)=>{
+            console.log(data);
+            this.open('success','Data Transaksi','Cetak Sukses!');
+            this.spinner.hide();
+            setTimeout(() => {
+              this.router.navigateByUrl('transaksi/suratorder');
+            },3000);
+          },
+          function(error){
+            this.open('error','Data Transaksi','Cetak Gagal!');
+            this.spinner.hide();
+          },
+          function(){}
+        );
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  //CUSTOMER
+  modalcustomer(){
+    $('#showcustomer-modal').modal('show');  
+  }
+
+  get g() { return this.customerForm.controls; }
+
+  onSubmitCustomer() {
+    this.submitted = true;
+    if (this.customerForm.invalid) {
+      return;
+    }
+    this.simpancustomer();
+  }
+
+  simpancustomer(){
+    this.spinner.show();
+    var jenislama = this.jenis;
+    this.jenis = "customer";
+    this.customerservice.savecustomer(new CustomerArray(this.id,this.kodecustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur,this.jeniskelamin))
+    .subscribe(
+      (data)=>{
+        this.open('success','Data Customer','Simpan Data Sukses!');
+        $('#showcustomer-modal').modal('hide');
+        this.spinner.hide();
+        this.jenis = jenislama;
+        this.tampilcustomer();
+        setTimeout(() => {
+        this.id_customer = data.id;
+        this.nama = "";
+        this.alamat = "";
+        this.notelp = "";
+        },1000);
+      },
+      function(error){
+        this.open('error','Data Customer','Simpan Data Gagal!');
+        $('#showcustomer-modal').modal('hide');
+        this.spinner.hide();
+        this.jenis = jenislama;
+      },
+      function(){
+
+      }
+    );
+  }
+
+  //RESEP
+  resepquery(){
+    this.spinner.show();
+    this.customerservice.showresep(this.id_customer).subscribe(
+      //Jika data sudah berhasil di load
+      (data:ResepArray[])=>{
+        this.resep=data;
+        this.spinner.hide();
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
+
+  tampilresep(){
+    $('#addresep-modal').modal('hide');
+    $('#showresep-modal').modal('show');
+    this.resepquery();
+  }
+
+  tambahresep(){
+    $('#showresep-modal').modal('hide');
+    $('#addresep-modal').modal('show');
+    this.kosongresep();
+  }
+
+  pilihresep(res){
+    this.statusresep = res.id;
+    $('#showresep-modal').modal('hide');
+    this.open('success','Data Resep','Resep dipilih!');
+  }
+
+  kosongresep(){
+    this.r_sph = 0;
+    this.l_sph = 0;
+    this.r_cyl = 0;
+    this.l_cyl = 0;
+    this.r_axs = 0;
+    this.l_axs = 0;
+    this.r_add = 0;
+    this.l_add = 0;
+    this.pd = 0;
+    this.visakhir = 0;
+    this.A = 0;
+    this.B = 0;
+    this.dbl = 0;
+    this.mpd = 0;
+    this.shpv = 0;
+    this.jenisframe = '';
+    this.koridor = '';
+    this.visusbalance = '';
+    this.dukeelder = '';
+    this.wrapangle = '';
+    this.pantoskopik = '';
+    this.vertexdistance = '';
+    this.catatan = '';
+  }
+
+  simpanresep(){
+    $('#addresep-modal').modal('hide');
+    this.spinner.show();
+    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
     .subscribe(
       (data:ResepArray[])=>{
         this.spinner.hide();

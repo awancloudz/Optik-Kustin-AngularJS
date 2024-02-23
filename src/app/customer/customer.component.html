@@ -34,7 +34,19 @@
                         </div>
                         <div class="form-group">
                             <label for="tanggallahir" class="control-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control" [(ngModel)]="tanggallahir" name="tanggallahir" formControlName="tanggallahir" [ngClass]="{ 'is-invalid': submitted && f.tanggallahir.errors }"> 
+                            <input type="date" class="form-control" [(ngModel)]="tanggallahir" name="tanggallahir" formControlName="tanggallahir" [ngClass]="{ 'is-invalid': submitted && f.tanggallahir.errors }" (change)="hitungumur()"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="umur" class="control-label">Umur</label>
+                            <input type="text" class="form-control" [(ngModel)]="umur" name="umur" formControlName="umur" [ngClass]="{ 'is-invalid': submitted && f.umur.errors }" disabled> 
+                        </div>
+                        <div class="form-group">
+                            <label for="jeniskelamin" class="control-label">Jenis Kelamin</label>
+                            <select class="form-control" [(ngModel)]="jeniskelamin" name="jeniskelamin" formControlName="jeniskelamin" [ngClass]="{ 'is-invalid': submitted && f.jeniskelamin.errors }">
+                                <option value="0">- Pilih Jenis Kelamin-</option>
+                                <option value="laki-laki">Laki-Laki</option>
+                                <option value="perempuan">Perempuan</option>
+                            </select>
                         </div>
                 </div>
                 <div class="modal-footer">

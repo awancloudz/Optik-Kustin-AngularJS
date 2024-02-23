@@ -71,10 +71,10 @@
                         <ul aria-expanded="false" class="collapse">
                           <li> <a [routerLink]="['/transaksi/pembelian']">Purchase</a> </li>
                           <li> <a [routerLink]="['/transaksi/kirimcabang']">Update Stok Cabang</a> </li>
-                          <li> <a [routerLink]="['/transaksi/pesan']">Pemesanan</a> </li>
+                          <!-- <li> <a [routerLink]="['/transaksi/pesan']">Pemesanan</a> </li>
                           <li> <a [routerLink]="['/transaksi/suratorder']">Surat Order</a> </li>
                           <li> <a [routerLink]="['/transaksi/retail']">Jual Langsung</a> </li>
-                          <!-- <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li> -->
+                          <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li> -->
                         </ul>
                     </li>
                     <li> <a [routerLink]="['/cabang']" aria-expanded="false"><i class="icon-location-pin fa-fw"></i> <span class="hide-menu"> Data Cabang </span></a> </li>
@@ -111,16 +111,17 @@
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-basket fa-fw"></i> <span class="hide-menu"> Transaksi </span></a>
                         <ul aria-expanded="false" class="collapse">
                           <li> <a [routerLink]="['/transaksi/pesan']">Pemesanan</a> </li>
-                          <li> <a [routerLink]="['/transaksi/retail']">Retail</a> </li>
-                          <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li>
+                          <li> <a [routerLink]="['/transaksi/suratorder']">Surat Order</a> </li>
+                          <li> <a [routerLink]="['/transaksi/retail']">Jual Langsung</a> </li>
+                          <!-- <li> <a [routerLink]="['/transaksi/grosir']">Grosir</a> </li> -->
                         </ul>
                     </li>
                     <li>
                       <a class="waves-effect" href="javascript:void(0);" aria-expanded="false"><i class="icon-list fa-fw"></i> <span class="hide-menu"> Laporan </span></a>
                         <ul aria-expanded="false" class="collapse">
                           <li> <a [routerLink]="['/laporan/pesan']">Pemesanan</a> </li>
-                          <li> <a [routerLink]="['/laporan/retail']">Retail</a> </li>
-                          <li> <a [routerLink]="['/laporan/grosir']">Grosir</a> </li>
+                          <li> <a [routerLink]="['/laporan/retail']">Jual Langsung</a> </li>
+                          <!-- <li> <a [routerLink]="['/laporan/grosir']">Grosir</a> </li> -->
                         </ul>
                     </li>
                     <li>
@@ -135,7 +136,7 @@
       <div class="page-wrapper">
           <router-outlet></router-outlet>
           <footer class="footer t-a-c">
-              © 2020 Optik Kustin
+              © 2024 Optik Kustin
           </footer>
       </div>
       <!-- ===== Page-Content-End ===== -->

@@ -22,9 +22,12 @@ declare var $:any;
 export class CustomerComponent implements OnInit {
   items:CustomerArray[]=[];
   id:any;
+  kodecustomer:String;
   nama:String;
   alamat:String;
   notelp:String;
+  umur:String;
+  jeniskelamin:String;
   jenis:String;
   txtcari:String;
   tombol:String;
@@ -49,7 +52,9 @@ export class CustomerComponent implements OnInit {
       nama: ['', Validators.required],
       alamat: ['', Validators.required],
       notelp: ['', [Validators.required]],
-      tanggallahir: ['', [Validators.nullValidator]]
+      tanggallahir: ['', [Validators.nullValidator]],
+      umur: ['', [Validators.nullValidator]],
+      jeniskelamin: ['', [Validators.nullValidator]]
     });
     this.spinner.show();
     this.customerservice.showcustomer().subscribe(
@@ -81,7 +86,7 @@ export class CustomerComponent implements OnInit {
 
   cari(){
     //this.spinner.show();
-    this.customerservice.searchcustomer(new CustomerArray(this.id,this.txtcari,this.alamat,this.notelp,this.jenis,this.tanggallahir)).subscribe(
+    this.customerservice.searchcustomer(new CustomerArray(this.id,this.kodecustomer,this.txtcari,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur, this.jeniskelamin)).subscribe(
       //Jika data sudah berhasil di load
       (data:CustomerArray[])=>{
         this.items=data;
@@ -100,7 +105,7 @@ export class CustomerComponent implements OnInit {
     this.spinner.show();
     this.jenis = "customer";
     if(this.tombol == "tambah"){
-      this.customerservice.savecustomer(new CustomerArray(this.id,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir))
+      this.customerservice.savecustomer(new CustomerArray(this.id,this.kodecustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur,this.jeniskelamin))
       .subscribe(
         (data:CustomerArray[])=>{
           this.open('success','Data Customer','Simpan Data Sukses!');
@@ -117,7 +122,7 @@ export class CustomerComponent implements OnInit {
       );
     }
     else if(this.tombol == "edit"){
-      this.customerservice.editcustomer(new CustomerArray(this.id,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir))
+      this.customerservice.editcustomer(new CustomerArray(this.id,this.kodecustomer,this.nama,this.alamat,this.notelp,this.jenis,this.tanggallahir,this.umur,this.jeniskelamin))
       .subscribe(
         (data:CustomerArray[])=>{
           this.open('success','Data Customer','Edit Data Sukses!');
@@ -148,8 +153,49 @@ export class CustomerComponent implements OnInit {
     $('#responsive-modal').modal('show');
     this.tombol = "tambah";
     this.kosongfield();
+    this.hitungumur();
+    this.jeniskelamin = "0";
   }
 
+  hitungumur(){
+    function hitungUmur(tanggalLahir: Date): string {
+      const sekarang = new Date();
+      const tahunSekarang = sekarang.getFullYear();
+      const bulanSekarang = sekarang.getMonth() + 1;
+      const hariSekarang = sekarang.getDate();
+  
+      const tahunLahir = tanggalLahir.getFullYear();
+      const bulanLahir = tanggalLahir.getMonth() + 1;
+      const hariLahir = tanggalLahir.getDate();
+  
+      let umurTahun = tahunSekarang - tahunLahir;
+      let umurBulan = bulanSekarang - bulanLahir;
+      let umurHari = hariSekarang - hariLahir;
+  
+      if (umurBulan < 0 || (umurBulan === 0 && umurHari < 0)) {
+          umurTahun--;
+          umurBulan += 12;
+      }
+  
+      if (umurHari < 0) {
+          const bulanSebelumnya = bulanSekarang === 1 ? 12 : bulanSekarang - 1;
+          const tahunSebelumnya = bulanSekarang === 1 ? tahunSekarang - 1 : tahunSekarang;
+          const hariBulanSebelumnya = new Date(tahunSebelumnya, bulanSebelumnya, 0).getDate();
+          umurHari += hariBulanSebelumnya;
+          umurBulan--;
+      }
+  
+      return `${umurTahun} tahun ${umurBulan} bulan ${umurHari} hari`;
+    }
+  
+    function convertStringToDate(dateString: String): Date {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    }
+  
+    const tgllahir = convertStringToDate(this.tanggallahir);
+    this.umur = hitungUmur(tgllahir);
+  }
   edit(item){
     setTimeout(() => {
       this.id = item.id;
@@ -157,6 +203,8 @@ export class CustomerComponent implements OnInit {
       this.alamat = item.alamat;
       this.notelp = item.notelp;
       this.tanggallahir = this.datePipe.transform(item.tanggallahir, 'yyyy-MM-dd');
+      this.hitungumur();
+      this.jeniskelamin = item.jeniskelamin;
       this.tombol = "edit";
       $('#responsive-modal').modal('show');
     },500);
@@ -207,12 +255,21 @@ export class CustomerResepComponent implements OnInit {
   l_axs:Number;
   r_add:Number; 
   l_add:Number; 
-  r_mpd:Number; 
-  l_mpd:Number; 
-  r_pv:Number; 
-  l_pv:Number;
-  r_sh:Number; 
-  l_sh:Number; 
+  pd:Number; 
+  visakhir:Number;
+  A:Number; 
+  B:Number; 
+  dbl:Number;
+  mpd:Number; 
+  shpv:Number; 
+  jenisframe:String;
+  koridor:String;
+  visusbalance:String;
+  dukeelder:String;
+  wrapangle:String;
+  pantoskopik:String;
+  vertexdistance:String;
+  catatan:String;
   tombol:String;
 
   AlertSettings = {
@@ -257,12 +314,21 @@ export class CustomerResepComponent implements OnInit {
     this.l_axs = 0;
     this.r_add = 0;
     this.l_add = 0;
-    this.r_mpd = 0;
-    this.l_mpd = 0;
-    this.r_pv = 0;
-    this.l_pv = 0;
-    this.r_sh = 0;
-    this.l_sh = 0;
+    this.pd = 0;
+    this.visakhir = 0;
+    this.A = 0;
+    this.B = 0;
+    this.dbl = 0;
+    this.mpd = 0;
+    this.shpv = 0;
+    this.jenisframe = '';
+    this.koridor = '';
+    this.visusbalance = '';
+    this.dukeelder = '';
+    this.wrapangle = '';
+    this.pantoskopik = '';
+    this.vertexdistance = '';
+    this.catatan = '';
   }
 
   tambah(){
@@ -274,9 +340,10 @@ export class CustomerResepComponent implements OnInit {
   simpan(){
     this.spinner.show();
     if(this.tombol == "tambah"){
-      this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.r_mpd,this.l_mpd,this.r_pv,this.l_pv,this.r_sh,this.l_sh))
+      this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
       .subscribe(
         (data:ResepArray[])=>{
+          console.log(data);
           this.open('success','Data Resep','Simpan Data Sukses!');
           this.spinner.hide();
           this.ngOnInit();
@@ -291,7 +358,7 @@ export class CustomerResepComponent implements OnInit {
       );
     }
     else if(this.tombol == "edit"){
-      this.customerservice.editresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.r_mpd,this.l_mpd,this.r_pv,this.l_pv,this.r_sh,this.l_sh))
+      this.customerservice.editresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
       .subscribe(
         (data:ResepArray[])=>{
           this.open('success','Data Resep','Edit Data Sukses!');
@@ -323,12 +390,21 @@ export class CustomerResepComponent implements OnInit {
       this.l_axs = item.l_axs;
       this.r_add = item.r_add;
       this.l_add = item.l_add;
-      this.r_mpd = item.r_mpd;
-      this.l_mpd = item.l_mpd;
-      this.r_pv = item.r_pv;
-      this.l_pv = item.l_pv;
-      this.r_sh = item.r_sh;
-      this.l_sh = item.l_sh;
+      this.pd = item.pd;
+      this.visakhir = item.visakhir;
+      this.A = item.A;
+      this.B = item.B;
+      this.dbl = item.dbl;
+      this.mpd = item.mpd;
+      this.shpv = item.shpv;
+      this.jenisframe = item.jenisframe;
+      this.koridor = item.koridor;
+      this.visusbalance = item.visusbalance;
+      this.dukeelder = item.dukeelder;
+      this.wrapangle = item.wrapangle;
+      this.pantoskopik = item.pantoskopik;
+      this.vertexdistance = item.vertexdistance;
+      this.catatan = item.catatan;
       this.tombol = "edit";
       $('#responsive-modal').modal('show');
     },500);

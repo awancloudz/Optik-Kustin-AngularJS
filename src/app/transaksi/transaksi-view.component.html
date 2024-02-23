@@ -38,7 +38,7 @@
                 </div>
                 <br>
                 <h3 *ngIf="item.id != null && item.statusresep != 0"><b>DATA RESEP</b></h3>
-                <table *ngIf="item.id != null && item.statusresep != 0" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
+                <table *ngIf="item.id != null && item.statusresep != 0" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack">
                     <thead>
                         <tr>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Tgl Periksa</th>
@@ -47,9 +47,8 @@
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">CYL</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PV</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">SH</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PD</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Vis AKhir</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,9 +59,8 @@
                             <td>{{ res.r_cyl }}<br>{{ res.l_cyl }}</td>
                             <td>{{ res.r_axs }}<br>{{ res.l_axs }}</td>
                             <td>{{ res.r_add }}<br>{{ res.l_add }}</td>
-                            <td>{{ res.r_mpd }}<br>{{ res.l_mpd }}</td>
-                            <td>{{ res.r_pv }}<br>{{ res.l_pv }}</td>
-                            <td>{{ res.r_sh }}<br>{{ res.l_sh }}</td>
+                            <td>{{ res.pd }}</td>
+                            <td>{{ res.visakhir }}</td>
                         </tr>
                     </tbody>
                 </table>

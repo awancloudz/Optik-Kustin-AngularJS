@@ -32,6 +32,22 @@ export class CustomerService {
                   body, options)
                  .pipe(map((response:Response)=>response.json()));
   }
+  searchidmember(item:CustomerArray){
+    let body = JSON.stringify(item);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    return this.http.post(this.url+"/cariidmember",
+                  body, options)
+                 .pipe(map((response:Response)=>response.json()));
+  }
+  searchnohp(item:CustomerArray){
+    let body = JSON.stringify(item);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    return this.http.post(this.url+"/carinohp",
+                  body, options)
+                 .pipe(map((response:Response)=>response.json()));
+  }
   savecustomer(item:CustomerArray){
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json'});

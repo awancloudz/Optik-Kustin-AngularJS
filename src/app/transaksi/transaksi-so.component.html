@@ -14,10 +14,10 @@
                             <button class="btn btn-success" (click)="tambahresep()"><i class="fa fa-plus"></i> Tambah Resep</button>
                         </div>
                         <div class="col-md-9">
-                            <textarea class="form-control" [(ngModel)]="catatan" name="catatan" placeholder="catatan..."></textarea>
+                            <!-- <textarea class="form-control" [(ngModel)]="catatan" name="catatan" placeholder="catatan..."></textarea> -->
                         </div>
                     </div><br>
-                    <table *ngIf="resep[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
+                    <table *ngIf="resep[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack">
                         <thead>
                             <tr>
                                 <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Tgl Periksa</th>
@@ -26,9 +26,8 @@
                                 <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">RCYL</th>
                                 <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
                                 <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
-                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
-                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PV</th>
-                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">SH</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PD</th>
+                                <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Vis AKhir</th>
                                 <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
                             </tr>
                         </thead>
@@ -40,9 +39,8 @@
                                 <td>{{ res.r_cyl }}<br>{{ res.l_cyl }}</td>
                                 <td>{{ res.r_axs }}<br>{{ res.l_axs }}</td>
                                 <td>{{ res.r_add }}<br>{{ res.l_add }}</td>
-                                <td>{{ res.r_mpd }}<br>{{ res.l_mpd }}</td>
-                                <td>{{ res.r_pv }}<br>{{ res.l_pv }}</td>
-                                <td>{{ res.r_sh }}<br>{{ res.l_sh }}</td>
+                                <td>{{ res.pd }}</td>
+                                <td>{{ res.visakhir }}</td>
                                 <td class="text-nowrap" *ngIf="statusresep != res.id">
                                     <a data-toggle="tooltip" data-original-title="Edit" (click)="pilihresep(res)"> <i class="fa fa-check text-inverse m-r-10"></i> Pilih</a>
                                 </td>
@@ -67,17 +65,21 @@
                 <form (ngSubmit)="simpanresep()">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-2"></div>
+                        <div class="col-md-1"></div>
                         <div class="col-md-1"><b>SPH</b></div>
                         <div class="col-md-1"><b>CYL</b></div>
                         <div class="col-md-1"><b>AXS</b></div>
                         <div class="col-md-1"><b>ADD</b></div>
+                        <div class="col-md-1"><b>PD</b></div>
+                        <div class="col-md-1"><b>Vis Akhir</b></div>
+                        <div class="col-md-1"><b>A</b></div>
+                        <div class="col-md-1"><b>B</b></div>
+                        <div class="col-md-1"><b>DBL</b></div>
                         <div class="col-md-1"><b>MPD</b></div>
-                        <div class="col-md-1"><b>PV</b></div>
-                        <div class="col-md-1"><b>SH</b></div>
+                        <div class="col-md-1"><b>SH/PV</b></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2" style="text-align: right;"><b>R:</b></div>
+                        <div class="col-md-1"><b>R:</b></div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="r_sph" name="r_sph"> 
@@ -97,25 +99,45 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="r_add" name="r_add"> 
                             </div>
-                        </div>
+                        </div>  
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_mpd" name="r_mpd"> 
+                                <input type="text" class="form-control" [(ngModel)]="pd" name="pd"> 
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_pv" name="r_pv"> 
+                                <input type="text" class="form-control" [(ngModel)]="visakhir" name="visakhir"> 
+                            </div>
+                        </div> 
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="A" name="A"> 
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="r_sh" name="r_sh"> 
+                                <input type="text" class="form-control" [(ngModel)]="B" name="B"> 
                             </div>
                         </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="dbl" name="dbl"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="mpd" name="mpd"> 
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" [(ngModel)]="shpv" name="shpv"> 
+                            </div>
+                        </div>                                             
                     </div>
                     <div class="row">
-                        <div class="col-md-2" style="text-align: right;"><b>L:</b></div>
+                        <div class="col-md-1"><b>L:</b></div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <input type="text" class="form-control" [(ngModel)]="l_sph" name="l_sph"> 
@@ -136,19 +158,42 @@
                                 <input type="text" class="form-control" [(ngModel)]="l_add" name="l_add"> 
                             </div>
                         </div>
-                        <div class="col-md-1">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_mpd" name="l_mpd"> 
+                                <label for="jenisframe">Jenis Frame</label>
+                                <input type="text" class="form-control" [(ngModel)]="jenisframe" name="jenisframe"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="koridor">Koridor</label>
+                                <input type="text" class="form-control" [(ngModel)]="koridor" name="koridor"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="visusbalance">Visus Balancing</label>
+                                <input type="text" class="form-control" [(ngModel)]="visusbalance" name="visusbalance"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="dukeelder">Duke Elder</label>
+                                <input type="text" class="form-control" [(ngModel)]="dukeelder" name="dukeelder"> 
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_pv" name="l_pv"> 
+                                <label for="wrapangle">Wrap Angle</label>
+                                <input type="text" class="form-control" [(ngModel)]="wrapangle" name="wrapangle"> 
                             </div>
-                        </div>
-                        <div class="col-md-1">
                             <div class="form-group">
-                                <input type="text" class="form-control" [(ngModel)]="l_sh" name="l_sh"> 
+                                <label for="pantoskopik">Pantoskopik</label>
+                                <input type="text" class="form-control" [(ngModel)]="pantoskopik" name="pantoskopik"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="vertexdistance">Vertex Distance</label>
+                                <input type="text" class="form-control" [(ngModel)]="vertexdistance" name="vertexdistance"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="catatan">Catatan</label>
+                                <input type="text" class="form-control" [(ngModel)]="catatan" name="catatan"> 
                             </div>
                         </div>
                     </div>
@@ -187,26 +232,14 @@
                         </div>
                         <div class="form-group">
                             <label for="notelp" class="control-label">No.Telp</label>
-                            <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && g.notelp.errors }" (change)="verifikasinohp()"> 
+                            <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && g.notelp.errors }"> 
                             <div *ngIf="submitted && g.notelp.errors" class="invalid-feedback">
                                 <div *ngIf="g.notelp.errors.required" style="color: red; font-style: italic;">No.Telp Wajib Diisi</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tanggallahir" class="control-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control" [(ngModel)]="tanggallahir" name="tanggallahir" formControlName="tanggallahir" [ngClass]="{ 'is-invalid': submitted && g.tanggallahir.errors }" (change)="hitungumur()"> 
-                        </div>
-                        <div class="form-group">
-                            <label for="umur" class="control-label">Umur</label>
-                            <input type="text" class="form-control" [(ngModel)]="umur" name="umur" formControlName="umur" [ngClass]="{ 'is-invalid': submitted && g.umur.errors }" disabled> 
-                        </div>
-                        <div class="form-group">
-                            <label for="jeniskelamin" class="control-label">Jenis Kelamin</label>
-                            <select class="form-control" [(ngModel)]="jeniskelamin" name="jeniskelamin" formControlName="jeniskelamin" [ngClass]="{ 'is-invalid': submitted && g.jeniskelamin.errors }">
-                                <option value="0">- Pilih Jenis Kelamin-</option>
-                                <option value="laki-laki">Laki-Laki</option>
-                                <option value="perempuan">Perempuan</option>
-                            </select>
+                            <input type="date" class="form-control" [(ngModel)]="tanggallahir" name="tanggallahir" formControlName="tanggallahir" [ngClass]="{ 'is-invalid': submitted && g.tanggallahir.errors }"> 
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -221,14 +254,14 @@
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <h3 align="center" style="text-transform: uppercase;"><b>TAMBAH TRANSAKSI {{ jenis }}</b></h3>                
+                <h3 align="center" style="text-transform: uppercase;"><b>INPUT RESEP / SURAT ORDER</b></h3>
                 <form [formGroup]="transaksiForm" (ngSubmit)="onSubmit()">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">Admin</label>
                             <label for="id_karyawan" class="control-label" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">Sales</label>
-                            <select class="form-control id_karyawan" [(ngModel)]="id_karyawan" name="id_karyawan" formControlName="id_karyawan" [ngClass]="{ 'is-invalid': submitted && f.id_karyawan.errors }" (change)="tampilsales()">
+                            <select class="form-control" [(ngModel)]="id_karyawan" name="id_karyawan" formControlName="id_karyawan" [ngClass]="{ 'is-invalid': submitted && f.id_karyawan.errors }" (change)="tampilsales()" disabled>
                                 <option value="0" *ngIf="jenis == 'pembelian' || jenis == 'kirimcabang'">- Pilih Admin -</option>
                                 <option value="0" *ngIf="jenis == 'pesan' || jenis == 'retail' || jenis =='grosir'">- Pilih Sales -</option>
                                 <option *ngFor="let emp of karyawan" value="{{ emp.id }}">{{ emp.nama }}</option>
@@ -243,7 +276,7 @@
                     <div class="col-md-6" *ngIf="jenis != 'kirimcabang'">
                         <div class="form-group">
                             <label for="status" class="control-label">Status Bayar</label>
-                            <select class="form-control" [(ngModel)]="status" name="status" formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }">
+                            <select class="form-control" [(ngModel)]="status" name="status" formControlName="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" disabled>
                                 <option value="lunas">Lunas</option>
                                 <option value="belum">Belum</option>
                             </select>
@@ -255,34 +288,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" *ngIf="jenis == 'pesan' || jenis =='grosir' || jenis == 'pembelian'">     
-                    <div class="col-md-3" *ngIf="jenis == 'pesan'">                    
-                        <div class="form-group">
-                            <label for="cariidcustomer" class="control-label">ID Member</label>
-                            <input type="text" class="form-control" [(ngModel)]="cariidcustomer" name="cariidcustomer" formControlName="cariidcustomer" [ngClass]="{ 'is-invalid': submitted && f.cariidcustomer.errors }" placeholder="Cari ID Member" (change)="cariidmember()">
-                            <div *ngIf="submitted && f.cariidcustomer.errors" class="invalid-feedback">
-                                <div *ngIf="f.cariidcustomer.errors.required" style="color: red; font-style: italic;">
-                                    Wajib diisi!
-                                </div>
-                            </div>
-                        </div>
-                    </div>      
-                    <div class="col-md-3" *ngIf="jenis == 'pesan'">                    
-                        <div class="form-group">
-                            <label for="carinohandphone" class="control-label">No.Handphone</label>
-                            <input type="text" class="form-control" [(ngModel)]="carinohandphone" name="carinohandphone" formControlName="carinohandphone" [ngClass]="{ 'is-invalid': submitted && f.carinohandphone.errors }" placeholder="Cari No.Handphone" (change)="carinohp()">
-                            <div *ngIf="submitted && f.carinohandphone.errors" class="invalid-feedback">
-                                <div *ngIf="f.carinohandphone.errors.required" style="color: red; font-style: italic;">
-                                    Wajib diisi!
-                                </div>
-                            </div>
-                        </div>
-                    </div>            
-                    <div class="col-md-3">                    
+                <div class="row" *ngIf="jenis == 'pesan' || jenis =='grosir' || jenis == 'pembelian'">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="id_customer" class="control-label" *ngIf="jenis == 'pembelian'">Vendor</label>
-                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pesan' || jenis =='grosir'">Nama</label>
-                            <select class="form-control id_customer" [(ngModel)]="id_customer" name="id_customer" formControlName="id_customer" [ngClass]="{ 'is-invalid': submitted && f.id_customer.errors }" (change)="gantiresep()">
+                            <label for="id_customer" class="control-label" *ngIf="jenis == 'pesan' || jenis =='grosir'">Customer</label>
+                            <select class="form-control" [(ngModel)]="id_customer" name="id_customer" formControlName="id_customer" [ngClass]="{ 'is-invalid': submitted && f.id_customer.errors }" (change)="gantiresep()" disabled>
                                 <option *ngFor="let cust of customer" value="{{ cust.id }}">{{ cust.nama }}</option>
                             </select>
                             <div *ngIf="submitted && f.id_customer.errors" class="invalid-feedback">
@@ -292,12 +303,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <br>
-                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pembelian' && level == 'admin'"><i class="fa fa-plus"></i> Tambah Vendor</a>
-                        <a class="btn btn-primary waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="modalcustomer()"><i class="fa fa-plus"></i> Customer</a>&nbsp;
-                        <!-- <a class="btn btn-warning waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tampilresep()"><i class="fa fa-eye"></i> Pilih Resep</a>&nbsp;
-                        <a class="btn btn-success waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tambahresep()"><i class="fa fa-plus"></i> Resep</a> -->
+                        <a class="btn btn-warning waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tampilresep()"><i class="fa fa-eye"></i> Pilih Resep</a>&nbsp;
+                        <a class="btn btn-success waves-effect waves-light" *ngIf="jenis == 'pesan' || jenis =='grosir'" (click)="tambahresep()"><i class="fa fa-plus"></i> Resep</a>
 
                     </div>
                 </div>
@@ -326,40 +335,30 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="tanggaltransaksi" class="control-label">Tanggal Transaksi</label>
-                            <input type="date" class="form-control" [(ngModel)]="tanggaltransaksi" name="tanggaltransaksi" id="tanggaltransaksi">
+                            <input type="date" class="form-control" [(ngModel)]="tanggaltransaksi" name="tanggaltransaksi" id="tanggaltransaksi" disabled>
                         </div>
                     </div>
                     <div class="col-md-2" *ngIf="jenis == 'pesan'">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="hari" class="control-label">H+</label>
                             <input type="text" class="form-control" [(ngModel)]="hari" name="hari" (keyup)="edithari()">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-4" *ngIf="jenis == 'pesan'">
                         <div class="form-group">
                             <label for="tanggalselesai" class="control-label">Tanggal Selesai</label>
-                            <input type="date" class="form-control" [(ngModel)]="tanggalselesai" name="tanggalselesai">
+                            <input type="date" class="form-control" [(ngModel)]="tanggalselesai" name="tanggalselesai" disabled>
                         </div>
                     </div>
                     <div class="col-md-2" *ngIf="jenis == 'pesan'">
                         <div class="form-group">
                             <label for="jamselesai" class="control-label">Jam</label>
-                            <input type="time" class="form-control" [(ngModel)]="jamselesai" name="jamselesai">
+                            <input type="time" class="form-control" [(ngModel)]="jamselesai" name="jamselesai" disabled>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="white-box">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Cari Kode Produk.." (change)="caribarcode()" [(ngModel)]="kodeproduk" name="kodeproduk">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <!-- <button class="btn btn-success waves-effect waves-light"><i class="fa fa-briefcase"></i> Lihat Semua Produk</button> -->
-                    </div>
-                </div>
                 <h3 align="center" *ngIf="keranjang[0].id == null"><b>[ DAFTAR PRODUK MASIH KOSONG! ]</b></h3>
                 <h3 align="center" *ngIf="keranjang[0].id != null"><b>DAFTAR PRODUK</b></h3>
                 <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="keranjang[0].id != null">
@@ -382,19 +381,9 @@
                             <td style="text-align: right;">{{ cart.harga | currency:"IDR":""}}</td>
                             <td style="text-align: right;" *ngIf="cart.produk.diskon > 0">{{ cart.produk.diskon }} %</td>
                             <td style="text-align: right;" *ngIf="cart.produk.diskon == 0">0</td>
-                            <td style="text-align: center;">
-                                <a (click)="decrement(i)"><i class="fa fa-minus"></i></a>&nbsp;&nbsp;
-                                {{ cart.jumlah }}&nbsp;&nbsp;
-                                <a (click)="increment(i)"><i class="fa fa-plus"></i></a>
-                            </td>
-                            <td style="text-align: center;">
-                                <!-- {{ cart.diskon | currency:"IDR":""}} -->
-                            <input type="text" id="diskon_{{ i }}" (change)="editdiskon(i)" value="{{ cart.diskon }}"> 
-                            </td>
+                            <td style="text-align: center;">{{ cart.jumlah }}</td>
+                            <td style="text-align: center;">{{ cart.diskon | currency:"IDR":""}}</td>
                             <td style="text-align: right;">{{ cart.total | currency:"IDR":""}}</td>
-                            <td style="text-align: center;">
-                                <a data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(cart)"> <i class="fa fa-close text-danger"></i> </a>
-                            </td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right;"><b>Total Belanja</b></td><td style="text-align: right;"><b>{{ totalbelanja | currency:"IDR":""}}</b></td>
@@ -407,16 +396,11 @@
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right;"><b>Bayar / Uang Muka</b></td><td style="text-align: right;">
-                                <input type="text" class="form-control" [(ngModel)]="bayar" name="bayar" (keyup)="editbayar()">
+                                <b>{{ bayar | currency:"IDR":""}}</b>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" style="text-align: right;"><b>Metode Pembayaran</b></td><td style="text-align: right;">
-                                <select class="form-control" [(ngModel)]="metode" name="metode">
-                                    <option value="cash">Cash</option>
-                                    <option value="debit">Debit/Kredit</option>
-                                </select>
-                            </td>
+                            <td colspan="6" style="text-align: right;"><b>Metode Pembayaran</b></td><td style="text-align: right;"><b>{{ bayar | currency:"IDR":""}}</b></td>
                         </tr>
                         <tr>
                             <td colspan="6" style="text-align: right;"><b>Kembali</b></td><td style="text-align: right;"><b>{{ kembali | currency:"IDR":""}}</b></td>
@@ -479,4 +463,3 @@
 <button 
 [printStyle]="{table : {'font-family':'Arial Narrow','font-size':'10'}, p : {'font-family':'Arial Narrow','font-size':'12'}}"
 printSectionId="print-section" ngxPrint id="tb_print">print</button> 
-

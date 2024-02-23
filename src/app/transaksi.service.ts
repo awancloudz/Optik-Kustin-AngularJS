@@ -18,6 +18,8 @@ export class TransaksiService {
   private items:TransaksiArray[]=[];
   private cart:KeranjangArray[]=[];
   private url:string="http://localhost:8000/transaksi";
+  private urlstore:string="https://honestly-certain-dingo.ngrok-free.app/api/print/suratorder/";
+  private urlwa:string="http://103.31.39.135:3000/api/pemesanan";
   private idprofile = JSON.parse(localStorage.getItem("profileuser"))[0].profile.id;
   constructor(public http: Http) { 
 
@@ -25,15 +27,43 @@ export class TransaksiService {
   //TRANSAKSI
   showtransaksi(jenis)
   {
-    return this.http.get(this.url + "/" + jenis + "/profile/"+ this.idprofile).pipe(
-      map((response:Response)=>response.json())
-    );
+    if(jenis=='suratorder'){
+      return this.http.get(this.url + "/pesan/profile/"+ this.idprofile).pipe(
+        map((response:Response)=>response.json())
+      );
+    }
+    else{
+      return this.http.get(this.url + "/" + jenis + "/profile/"+ this.idprofile).pipe(
+        map((response:Response)=>response.json())
+      );
+    }
   }
   showdetailtransaksi(idtrans)
   {
     return this.http.get(this.url + "/view/" + idtrans).pipe(
       map((response:Response)=>response.json())
     );
+  }
+  showsuratorder(idtrans){
+    return this.http.get(this.url + "/viewsuratorder/" + idtrans).pipe(
+      map((response:Response)=>response.json())
+    );
+  }
+  cetaksuratorder(item){
+    let body = JSON.stringify(item);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers, withCredentials: false });
+    return this.http.post(this.urlstore,
+                  body,options)
+                 .pipe(map((response:Response)=>response.json()));
+  }
+  kirimwaorder(item){
+    let body = JSON.stringify(item);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers, withCredentials: false });
+    return this.http.post(this.urlwa,
+                  body,options)
+                 .pipe(map((response:Response)=>response.json()));
   }
   searchtransaksi(item:TransaksiArray){
     let body = JSON.stringify(item);
@@ -48,6 +78,14 @@ export class TransaksiService {
     let headers = new Headers({ 'Content-Type': 'application/json'});
     let options = new RequestOptions({ headers: headers, withCredentials: true });
     return this.http.post(this.url,
+                  body, options)
+                 .pipe(map((response:Response)=>response.json()));
+  }
+  updatetransaksi(item:TransaksiArray){
+    let body = JSON.stringify(item);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    return this.http.patch(this.url,
                   body, options)
                  .pipe(map((response:Response)=>response.json()));
   }

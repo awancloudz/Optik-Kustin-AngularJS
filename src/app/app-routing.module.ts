@@ -9,7 +9,7 @@ import { CustomerComponent, CustomerResepComponent } from './customer/customer.c
 import { MerkComponent } from './merk/merk.component';
 import { PenggunaComponent } from './pengguna/pengguna.component';
 import { CabangComponent, CabangUtamaComponent, CabangStokComponent, CabangTransaksiComponent } from './cabang/cabang.component';
-import { TransaksiComponent, TransaksiViewComponent, TransaksiAddComponent } from './transaksi/transaksi.component';
+import { TransaksiComponent, TransaksiViewComponent, TransaksiAddComponent, TransaksiSOComponent } from './transaksi/transaksi.component';
 import { LaporanComponent } from './laporan/laporan.component';
 
 
@@ -33,6 +33,7 @@ const routes: Routes = [
   { path: 'profile', component: CabangUtamaComponent },
   { path: 'transaksi/:jenis', component: TransaksiComponent},
   { path: 'transaksi/view/:idtrans', component: TransaksiViewComponent},
+  { path: 'transaksi/so/:jenis/:idtrans', component: TransaksiSOComponent},
   { path: 'transaksi/add/:jenis', component: TransaksiAddComponent},
   { path: 'laporan/:jenis', component: LaporanComponent},
   { path: 'notfound', component: HomeNotfoundComponent },

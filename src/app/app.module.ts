@@ -21,7 +21,7 @@ import { CustomerComponent, CustomerResepComponent } from './customer/customer.c
 import { MerkComponent } from './merk/merk.component';
 import { PenggunaComponent } from './pengguna/pengguna.component';
 import { CabangComponent, CabangUtamaComponent, CabangStokComponent, CabangTransaksiComponent } from './cabang/cabang.component';
-import { TransaksiComponent, TransaksiViewComponent, TransaksiAddComponent } from './transaksi/transaksi.component';
+import { TransaksiComponent, TransaksiViewComponent, TransaksiAddComponent, TransaksiSOComponent } from './transaksi/transaksi.component';
 
 import { DatePipe } from '@angular/common';
 import { LaporanComponent } from './laporan/laporan.component';
@@ -39,6 +39,7 @@ import { LaporanComponent } from './laporan/laporan.component';
     PenggunaComponent,
     CabangComponent, CabangUtamaComponent, CabangStokComponent, CabangTransaksiComponent, 
     TransaksiComponent, TransaksiViewComponent, TransaksiAddComponent, LaporanComponent, 
+    TransaksiSOComponent,
   ],
   imports: [
     BrowserModule,
