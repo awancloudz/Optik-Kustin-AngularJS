@@ -27,7 +27,7 @@
                             <th *ngIf="jenis != 'kirimcabang'" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Diskon</th>
                             <th *ngIf="jenis != 'kirimcabang'" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="5">Total</th>
                             <th *ngIf="jenis != 'kirimcabang'" scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6">Bayar</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" *ngIf="jenis == 'pesan' || jenis == 'suratorder'">Ambil</th>
+                            <!-- <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="6" *ngIf="jenis == 'pesan' || jenis == 'suratorder'">Ambil</th> -->
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="8">Action</th>
                         </tr>
                     </thead>
@@ -41,14 +41,15 @@
                             <!-- <td style="text-transform: uppercase;" *ngIf="item.statustransaksi == 'batal'">BATAL</td> -->
                             <td style="text-transform: uppercase;" *ngIf="item.bayar > 0 && item.bayar < item.subtotal && jenis != 'kirimcabang'">DP({{ item.bayar | currency:"IDR":""}})</td>
                             <td style="text-transform: uppercase;" *ngIf="item.bayar == item.subtotal || item.sisa == item.subtotal || item.sisa == 0 && jenis != 'kirimcabang'">{{ item.status }}</td>
-                            <td *ngIf="jenis == 'pesan' || jenis == 'suratorder'" style="text-transform: uppercase;">{{ item.statustransaksi }}</td>
+                            <!-- <td *ngIf="jenis == 'pesan' || jenis == 'suratorder'" style="text-transform: uppercase;">{{ item.statustransaksi }}</td> -->
                             <td class="text-nowrap">
                                 <!-- <a data-toggle="tooltip" data-original-title="Edit" (click)="edit(item)"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a> -->
-                                <a *ngIf="level == 'admin' && jenis != 'kirimcabang'" data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-trash text-warning m-r-10"></i> </a>
+                                <a *ngIf="level == 'admin' && jenis != 'kirimcabang'" data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-trash text-warning m-r-10"></i> </a>&nbsp;
+                                <a *ngIf="item.statusresep != '0'  && jenis =='pesan' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Cetak" (click)="kirimwa(item.id)"><i class="fa fa-paper-plane text-success"></i> Kirim WA</a>&nbsp;
                                 <a *ngIf="item.statusresep != '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Cetak" (click)="cetakstruk(item.id)"> <i class="fa fa-print text-success m-r-10"></i> </a>
                                 <a *ngIf="item.statustransaksi == 'belum' && jenis =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)"> <i class="fa fa-check text-primary"></i> Ambil&nbsp;</a>
                                 <a *ngIf="item.statustransaksi == 'belum'  && jenis =='pesan'" data-toggle="tooltip" data-original-title="Batal" (click)="batal(item)"> <i class="fa fa-close text-danger"></i> Batal</a>
-                                <a [routerLink]="['/transaksi/so/pesan/',item.id]" *ngIf="item.statusresep == '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'"data-toggle="tooltip" data-original-title="Input SO"> <i class="fa fa-pencil text-inverse m-r-10"></i>Input SO</a>
+                                <a [routerLink]="['/transaksi/so/pesan/',item.id]" *ngIf="item.statusresep == '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'"data-toggle="tooltip" data-original-title="Input SO"> <i class="fa fa-clipboard text-inverse"></i> Input SO</a>
                             </td>
                         </tr>
                     </tbody>

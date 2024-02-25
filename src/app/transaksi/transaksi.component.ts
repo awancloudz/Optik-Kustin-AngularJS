@@ -279,7 +279,37 @@ export class TransaksiComponent implements OnInit {
       }
     );
   }
-
+  kirimwa(id){
+    this.transaksiservice.showsuratorder(id).subscribe(
+      //Jika data sudah berhasil di load
+      (data:TransaksiArray[])=>{
+        //kirim request ke printer server
+        this.transaksiservice.kirimwaorder(data)
+        .subscribe(
+          (data)=>{
+            console.log(data);
+            this.open('success','Data Transaksi','Cetak Sukses!');
+            this.spinner.hide();
+            setTimeout(() => {
+              this.router.navigateByUrl('transaksi/'+this.jenis);
+            },3000);
+          },
+          function(error){
+            this.open('error','Data Transaksi','Cetak Gagal!');
+            this.spinner.hide();
+          },
+          function(){}
+        );
+      },
+      //Jika Error
+      function (error){   
+        this.spinner.hide();
+      },
+      //Tutup Loading
+      function(){
+      }
+    );
+  }
 }
 
 @Component({

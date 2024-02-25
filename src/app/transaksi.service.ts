@@ -58,8 +58,9 @@ export class TransaksiService {
                  .pipe(map((response:Response)=>response.json()));
   }
   kirimwaorder(item){
+    console.log(item);
     let body = JSON.stringify(item);
-    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({ headers: headers, withCredentials: false });
     return this.http.post(this.urlwa,
                   body,options)
