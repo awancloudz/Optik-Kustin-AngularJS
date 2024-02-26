@@ -26,14 +26,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="kota" class="control-label">Kota</label>
+                            <label for="kota" class="control-label">Alamat 2 <i>(Kecamatan, Kelurahan, Kota/Kab)</i></label>
                             <input type="text" class="form-control" [(ngModel)]="kota" name="kota" formControlName="kota" [ngClass]="{ 'is-invalid': submitted && f.kota.errors }"> 
                             <div *ngIf="submitted && f.kota.errors" class="invalid-feedback">
                                 <div *ngIf="f.kota.errors.required" style="color: red; font-style: italic;">Kota Wajib Diisi</div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="notelp" class="control-label">No.Telp</label>
+                            <label for="notelp" class="control-label">No.Telp / Whatsapp</label>
                             <input type="text" class="form-control" [(ngModel)]="notelp" name="notelp" formControlName="notelp" [ngClass]="{ 'is-invalid': submitted && f.notelp.errors }"> 
                             <div *ngIf="submitted && f.notelp.errors" class="invalid-feedback">
                                 <div *ngIf="f.notelp.errors.required" style="color: red; font-style: italic;">No.Telp Wajib Diisi</div>
@@ -62,10 +62,10 @@
                 <table *ngIf="items[0].id != null" class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack"> <!-- data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch -->
                     <thead>
                         <tr>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Nama</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Cabang</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Alamat</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">Kota</th>
-                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">No Telp</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">Alamat 2 <i>(Kecamatan, Kelurahan, Kota/Kab)</i></th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">No.Telp / Whatsapp</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Action</th>
                         </tr>
                     </thead>

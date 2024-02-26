@@ -487,7 +487,8 @@ export class TransaksiAddComponent implements OnInit {
   A:Number; 
   B:Number; 
   dbl:Number;
-  mpd:Number; 
+  r_mpd:Number; 
+  l_mpd:Number; 
   shpv:Number;
   jenisframe:String;
   koridor:String;
@@ -1202,7 +1203,8 @@ export class TransaksiAddComponent implements OnInit {
     this.A = 0;
     this.B = 0;
     this.dbl = 0;
-    this.mpd = 0;
+    this.r_mpd = 0;
+    this.l_mpd = 0;
     this.shpv = 0;
     this.jenisframe = '';
     this.koridor = '';
@@ -1217,7 +1219,7 @@ export class TransaksiAddComponent implements OnInit {
   simpanresep(){
     $('#addresep-modal').modal('hide');
     this.spinner.show();
-    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
+    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.r_mpd,this.l_mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
     .subscribe(
       (data:ResepArray[])=>{
         this.spinner.hide();
@@ -1323,7 +1325,8 @@ export class TransaksiSOComponent implements OnInit {
   A:Number; 
   B:Number; 
   dbl:Number;
-  mpd:Number; 
+  r_mpd:Number; 
+  l_mpd:Number; 
   shpv:Number; 
   jenisframe:String;
   koridor:String;
@@ -1681,7 +1684,9 @@ export class TransaksiSOComponent implements OnInit {
     $('#addresep-modal').modal('show');
     this.kosongresep();
   }
-
+  inputpd(){
+    this.pd = Number(this.r_mpd) + Number(this.l_mpd);
+  }
   pilihresep(res){
     this.statusresep = res.id;
     $('#showresep-modal').modal('hide');
@@ -1702,7 +1707,8 @@ export class TransaksiSOComponent implements OnInit {
     this.A = 0;
     this.B = 0;
     this.dbl = 0;
-    this.mpd = 0;
+    this.r_mpd = 0;
+    this.l_mpd = 0;
     this.shpv = 0;
     this.jenisframe = '';
     this.koridor = '';
@@ -1717,7 +1723,7 @@ export class TransaksiSOComponent implements OnInit {
   simpanresep(){
     $('#addresep-modal').modal('hide');
     this.spinner.show();
-    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
+    this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.r_mpd,this.l_mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
     .subscribe(
       (data:ResepArray[])=>{
         this.spinner.hide();

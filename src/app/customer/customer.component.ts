@@ -260,7 +260,8 @@ export class CustomerResepComponent implements OnInit {
   A:Number; 
   B:Number; 
   dbl:Number;
-  mpd:Number; 
+  r_mpd:Number;
+  l_mpd:Number; 
   shpv:Number; 
   jenisframe:String;
   koridor:String;
@@ -319,7 +320,8 @@ export class CustomerResepComponent implements OnInit {
     this.A = 0;
     this.B = 0;
     this.dbl = 0;
-    this.mpd = 0;
+    this.r_mpd = 0;
+    this.l_mpd = 0;
     this.shpv = 0;
     this.jenisframe = '';
     this.koridor = '';
@@ -337,10 +339,14 @@ export class CustomerResepComponent implements OnInit {
     this.kosongfield();
   }
 
+  inputpd(){
+    this.pd = Number(this.r_mpd) + Number(this.l_mpd);
+  }
+
   simpan(){
     this.spinner.show();
     if(this.tombol == "tambah"){
-      this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
+      this.customerservice.saveresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.r_mpd,this.l_mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
       .subscribe(
         (data:ResepArray[])=>{
           console.log(data);
@@ -358,7 +364,7 @@ export class CustomerResepComponent implements OnInit {
       );
     }
     else if(this.tombol == "edit"){
-      this.customerservice.editresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
+      this.customerservice.editresep(new ResepArray(this.id,this.id_customer,this.r_sph,this.l_sph,this.r_cyl,this.l_cyl,this.r_axs,this.l_axs,this.r_add,this.l_add,this.pd,this.visakhir,this.A,this.B,this.dbl,this.r_mpd,this.l_mpd,this.shpv,this.jenisframe,this.koridor,this.visusbalance,this.dukeelder,this.wrapangle,this.pantoskopik,this.vertexdistance,this.catatan))
       .subscribe(
         (data:ResepArray[])=>{
           this.open('success','Data Resep','Edit Data Sukses!');
@@ -395,7 +401,8 @@ export class CustomerResepComponent implements OnInit {
       this.A = item.A;
       this.B = item.B;
       this.dbl = item.dbl;
-      this.mpd = item.mpd;
+      this.r_mpd = item.r_mpd;
+      this.l_mpd = item.l_mpd;
       this.shpv = item.shpv;
       this.jenisframe = item.jenisframe;
       this.koridor = item.koridor;
