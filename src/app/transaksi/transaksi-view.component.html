@@ -7,8 +7,7 @@
             <div class="white-box" *ngFor="let item of items">
                 <div class="row">
                     <div class="col-md-6">
-                        <a data-toggle="tooltip" data-original-title="Cetak" (click)="cetak(item)" class="btn btn-success"><i class="fa fa-print"></i> Cetak</a>&nbsp;
-                        <a *ngIf="item.statustransaksi == 'belum' && item.jenistransaksi =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)" class="btn btn-primary"> <i class="fa fa-check"></i> Ambil</a>
+                         &nbsp;<a *ngIf="item.statusorder == 'finish' && item.statustransaksi == 'belum' && item.jenistransaksi =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)" class="btn btn-primary"> <i class="fa fa-check"></i> Ambil</a>
                     </div>
                 </div>
                 <h3 align="center" style="text-transform: uppercase;"><b>DETAIL TRANSAKSI {{ item.jenistransaksi }}</b></h3>
@@ -34,7 +33,7 @@
                     <div class="col-md-4">: {{ item.karyawan.nama }}</div>
                 </div>
                 <div class="row" *ngIf="item.jenistransaksi == 'pesan'">
-                    <div class="col-md-2"><b>Pengambilan</b></div><div class="col-md-4" style="text-transform: uppercase;">: {{ item.statustransaksi }}</div>
+                    <div class="col-md-2"><b>Status Order</b></div><div class="col-md-4" style="text-transform: uppercase;">: {{ item.statusorder }}</div>
                 </div>
                 <br>
                 <h3 *ngIf="item.id != null && item.statusresep != 0"><b>DATA RESEP</b></h3>
@@ -47,6 +46,7 @@
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">CYL</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">AXS</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">ADD</th>
+                            <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">MPD</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">PD</th>
                             <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Vis AKhir</th>
                         </tr>
@@ -59,12 +59,44 @@
                             <td>{{ res.r_cyl }}<br>{{ res.l_cyl }}</td>
                             <td>{{ res.r_axs }}<br>{{ res.l_axs }}</td>
                             <td>{{ res.r_add }}<br>{{ res.l_add }}</td>
+                            <td>{{ res.r_mpd }}<br>{{ res.l_mpd }}</td>
                             <td>{{ res.pd }}</td>
                             <td>{{ res.visakhir }}</td>
                         </tr>
+                        <tr *ngFor="let res of resep">
+                            <td colspan="2"></td>
+                            <td><b>A</b><br>{{ res.A }}</td>
+                            <td><b>B</b><br>{{ res.A }}</td>
+                            <td><b>DBL</b><br>{{ res.dbl }}</td>
+                            <td><b>SH/PV</b><br>{{ res.shpv }}</td>
+                            <td colspan="4"><b>Catatan:</b><br/>{{ res.catatan }}</td>
+                        </tr>
+                        <tr *ngIf="level == 'headstore' && item.statusorder=='needapproval'">
+                            <td colspan="9">
+                                <form [formGroup]="transaksiForm" (ngSubmit)="onSubmit()">
+                                    <div class="form-group">
+                                        <label for="statusstok" class="control-label"><b>Status Stok</b></label>
+                                        <select class="form-control" [(ngModel)]="statusstok" name="statusstok" formControlName="statusstok" [ngClass]="{ 'is-invalid': submitted && f.statusstok.errors }">
+                                            <option value="0">- Pilih Status Stok -</option>
+                                            <option value="approval1">Stok Ada</option>
+                                            <option value="approval0">Stok Kosong</option>
+                                        </select>
+                                        <div *ngIf="submitted && f.statusstok.errors" class="invalid-feedback">
+                                            <div *ngIf="f.statusstok.errors.required" style="color: red; font-style: italic;">
+                                                Wajib diisi!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="statusstok" class="control-label"><b>Detail Keterangan</b></label>
+                                        <textarea class="form-control" [(ngModel)]="keteranganstok" name="statusstok" placeholder="Tulis keterangan detail *jika stok kosong"></textarea>
+                                    </div>
+                                    <button class="btn btn-lg btn-success waves-effect waves-light" (click)="onSubmit()">Approve</button>
+                                </form>                                
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <p><b>*Catatan:</b> {{ item.catatan }}</p>
                 <h3><b>DATA PRODUK</b></h3>
                 <table class="tablesaw table-bordered table-hover table" data-tablesaw-mode="stack" id="mytable" *ngIf="items[0].id != null">
                     <thead>

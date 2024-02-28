@@ -69,6 +69,7 @@ export class TransaksiComponent implements OnInit {
   status:String; 
   statustoko:String;
   statustransaksi:String;
+  statusorder:String;
   statusresep:Number;
   metode:String;
   txtcari:String;
@@ -92,6 +93,9 @@ export class TransaksiComponent implements OnInit {
       this.id_profile = this.pengguna[0].id_profile;
     }
     if(this.level == 'admin'){
+      this.tampiltransaksi();
+    }
+    else if(this.level == 'headstore'){
       this.tampiltransaksi();
     }
     else if((this.level == 'sales') && ((this.jenis == 'pesan') || (this.jenis == 'grosir') || (this.jenis == 'retail') || (this.jenis == 'suratorder'))){
@@ -150,7 +154,7 @@ export class TransaksiComponent implements OnInit {
     //this.spinner.show();
     if(this.jenis == 'suratorder'){
       var jenisso = 'pesan';
-      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,jenisso,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode)).subscribe(
+      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,jenisso,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusorder,this.statusresep,this.metode)).subscribe(
         //Jika data sudah berhasil di load
         (data:TransaksiArray[])=>{
           this.items=data;
@@ -165,7 +169,7 @@ export class TransaksiComponent implements OnInit {
       );
     }
     else{
-      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode)).subscribe(
+      this.transaksiservice.searchtransaksi(new TransaksiArray(this.id,this.txtcari,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusorder,this.statusresep,this.metode)).subscribe(
         //Jika data sudah berhasil di load
         (data:TransaksiArray[])=>{
           this.items=data;
@@ -206,7 +210,7 @@ export class TransaksiComponent implements OnInit {
     let konfirmasi = confirm("Konfirmasi pengambilan, klik OK untuk melanjutkan.");
     if(konfirmasi == true){
       this.spinner.show();
-      this.transaksiservice.lunastransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,this.statusresep,this.metode)).subscribe(
+      this.transaksiservice.lunastransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,this.statusorder,this.statusresep,this.metode)).subscribe(
         //Jika data sudah berhasil di load
         (data:TransaksiArray[])=>{
           this.open('success','Transaksi','Transaksi Selesai!');
@@ -227,7 +231,7 @@ export class TransaksiComponent implements OnInit {
     let konfirmasi = confirm("Konfirmasi pembatalan transaksi, klik OK untuk melanjutkan.");
     if(konfirmasi == true){
       this.spinner.show();
-      this.transaksiservice.bataltransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,item.statusresep,this.metode)).subscribe(
+      this.transaksiservice.bataltransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,this.statusorder,item.statusresep,this.metode)).subscribe(
         //Jika data sudah berhasil di load
         (data:TransaksiArray[])=>{
           this.open('success','Transaksi','Transaksi Dibatalkan!');
@@ -320,8 +324,15 @@ export class TransaksiComponent implements OnInit {
 export class TransaksiViewComponent implements OnInit {
   items:TransaksiArray[]=[];
   resep:ResepArray[]=[];
+  pengguna:PenggunaArray[]=[];
   statusresep:Number;
+  level:String;
   metode:String;
+  statusstok:String;
+  keteranganstok:String;
+  transaksiForm: FormGroup;
+  submitted = false;
+  
   AlertSettings = {
     overlay: true,
     overlayClickToClose: true,
@@ -337,6 +348,10 @@ export class TransaksiViewComponent implements OnInit {
     window.scrollTo(0, 0);
     this.spinner.show();
     var idtrans = this.route.snapshot.paramMap.get('idtrans');
+    this.pengguna = JSON.parse(localStorage.getItem("profileuser"));
+    if(this.pengguna.length > 0){
+        this.level = this.pengguna[0].level;
+    }
     this.transaksiservice.showdetailtransaksi(idtrans).subscribe(
       //Jika data sudah berhasil di load
       (data:TransaksiArray[])=>{
@@ -357,13 +372,17 @@ export class TransaksiViewComponent implements OnInit {
       function(){
       }
     );
+    this.transaksiForm = this.formBuilder.group({
+      statusstok: ['', Validators.required],
+    });
+    this.statusstok = "0";
   }
 
   lunas(item){
     let konfirmasi = confirm("Konfirmasi pengambilan, klik OK untuk melanjutkan.");
     if(konfirmasi == true){
       this.spinner.show();
-      this.transaksiservice.lunastransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,item.statusresep,this.metode)).subscribe(
+      this.transaksiservice.lunastransaksi(new TransaksiArray(item.id,item.kodetransaksi,item.jenis,item.tanggaltransaksi,item.jamtransaksi,item.tanggalselesai,item.jamselesai,item.id_customer,item.id_profile,item.id_karyawan,item.totaldiskon,item.totalbelanja,item.asuransi,item.subtotal,item.bayar,item.kembali,item.sisa,item.catatan,item.status,item.statustoko,item.statustransaksi,item.statusorder,item.statusresep,item.metode)).subscribe(
         //Jika data sudah berhasil di load
         (data:TransaksiArray[])=>{
           this.open('success','Transaksi','Transaksi Selesai!');
@@ -380,6 +399,43 @@ export class TransaksiViewComponent implements OnInit {
     } 
   }
 
+  get f() { return this.transaksiForm.controls; }
+
+  onSubmit() {
+    if(this.statusstok != "0"){
+      this.submitted = true;
+      if (this.transaksiForm.invalid) {
+        return;
+      }
+      this.simpan(this.items);
+    }
+    else{
+      alert("Status Stok Wajib Diisi!");
+    }
+  }
+
+  simpan(item){
+    //this.spinner.show();
+    alert(this.statusstok);
+    //Update Transaksi
+    /*this.transaksiservice.updatetransaksi(new TransaksiArray(item[0].id,item[0].kodetransaksi,item[0].jenis,item[0].tanggaltransaksi,item[0].jamtransaksi,item[0].tanggalselesai,item[0].jamselesai,item[0].id_customer,item[0].id_profile,item[0].id_karyawan,item[0].totaldiskon,item[0].totalbelanja,item[0].asuransi,item[0].subtotal,item[0].bayar,item[0].kembali,item[0].sisa,this.keteranganstok,item[0].status,item[0].statustoko,item[0].statustransaksi,this.statusstok,item[0].statusresep,item[0].metode))
+      .subscribe(
+        (data)=>{
+          this.open('success','Data Transaksi','Approval Sukses!');
+          this.spinner.hide();
+          setTimeout(() => {
+            this.router.navigateByUrl('transaksi/suratorder');
+          },3000);
+        },
+        function(error){
+          this.open('error','Data Transaksi','Approval Gagal!');
+          this.spinner.hide();
+        },
+        function(){
+  
+        }
+      );*/
+  }
   //RESEP
   resepquery(){
     this.spinner.show();
@@ -401,10 +457,6 @@ export class TransaksiViewComponent implements OnInit {
 
   open(type,judul,pesan) {
     this._alert.create(type, judul, pesan, this.AlertSettings);
-  }
-
-  cetak(item){
-
   }
 }
 
@@ -471,6 +523,7 @@ export class TransaksiAddComponent implements OnInit {
   status:String; 
   statustoko:String;
   statustransaksi:String;
+  statusorder:String;
   statusresep:Number;
   metode:String;
   //Variabel Resep
@@ -956,7 +1009,7 @@ export class TransaksiAddComponent implements OnInit {
 
   simpan(){
     this.spinner.show();
-    this.transaksiservice.savetransaksi(new TransaksiArray(this.id,this.kodetransaksi,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode))
+    this.transaksiservice.savetransaksi(new TransaksiArray(this.id,this.kodetransaksi,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusorder,this.statusresep,this.metode))
       .subscribe(
         (data)=>{
           this.open('success','Data Transaksi','Simpan Data Sukses!');
@@ -1309,6 +1362,7 @@ export class TransaksiSOComponent implements OnInit {
   status:String; 
   statustoko:String;
   statustransaksi:String;
+  statusorder:String;
   statusresep:Number;
   metode:String;
   //Variabel Resep
@@ -1557,9 +1611,10 @@ export class TransaksiSOComponent implements OnInit {
   }
 
   simpan(){
+    this.statusorder = "needapproval";
     this.spinner.show();
-    //Simpan Resep
-    this.transaksiservice.updatetransaksi(new TransaksiArray(this.id,this.kodetransaksi,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusresep,this.metode))
+    //Simpan SO
+    this.transaksiservice.updatetransaksi(new TransaksiArray(this.id,this.kodetransaksi,this.jenis,this.tanggaltransaksi,this.jamtransaksi,this.tanggalselesai,this.jamselesai,this.id_customer,this.id_profile,this.id_karyawan,this.totaldiskon,this.totalbelanja,this.asuransi,this.subtotal,this.bayar,this.kembali,this.sisa,this.catatan,this.status,this.statustoko,this.statustransaksi,this.statusorder,this.statusresep,this.metode))
       .subscribe(
         (data)=>{
           this.open('success','Data Transaksi','Simpan Data Sukses!');

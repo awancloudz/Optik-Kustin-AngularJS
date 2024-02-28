@@ -128,6 +128,12 @@
                       <a (click)="logout()" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
                     </li>
                   </ul>
+                  <ul id="side-menu" *ngIf="level == 'headstore'">
+                    <li> <a [routerLink]="['/transaksi/suratorder']"><i class="fa fa-check-square fa-fw"></i> Daftar Approval</a> </li>
+                    <li>
+                      <a (click)="logout()" aria-expanded="false"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu"> Logout </span></a>
+                    </li>
+                  </ul>
               </nav>
           </div>
       </aside>

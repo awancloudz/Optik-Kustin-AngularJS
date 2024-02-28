@@ -47,9 +47,11 @@
                                 <a *ngIf="level == 'admin' && jenis != 'kirimcabang'" data-toggle="tooltip" data-original-title="Hapus" (click)="hapus(item)"> <i class="fa fa-trash text-warning m-r-10"></i> </a>&nbsp;
                                 <a *ngIf="item.statusresep != '0'  && jenis =='pesan' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Kirim WA" (click)="kirimwa(item.id)"><i class="fa fa-paper-plane text-success"></i> Kirim WA</a>&nbsp;
                                 <a *ngIf="item.statusresep != '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Cetak" (click)="cetakstruk(item.id)"> <i class="fa fa-print text-success"></i> Cetak</a>
-                                <a *ngIf="item.statustransaksi == 'belum' && jenis =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)"> <i class="fa fa-check text-primary"></i> Ambil&nbsp;</a>
+                                <a *ngIf="item.statusorder == 'finish' && item.statustransaksi == 'belum' && jenis =='pesan'" data-toggle="tooltip" data-original-title="Lunas" (click)="lunas(item)"> <i class="fa fa-check text-primary"></i> Ambil&nbsp;</a>
                                 <a *ngIf="item.statustransaksi == 'belum'  && jenis =='pesan'" data-toggle="tooltip" data-original-title="Batal" (click)="batal(item)"> <i class="fa fa-close text-danger"></i> Batal</a>
-                                <a [routerLink]="['/transaksi/so/pesan/',item.id]" *ngIf="item.statusresep == '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'"data-toggle="tooltip" data-original-title="Input SO"> <i class="fa fa-clipboard text-inverse"></i> Input SO</a>
+                                <a [routerLink]="['/transaksi/so/pesan/',item.id]" *ngIf="level == 'sales' && item.statusresep == '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Input SO"> <i class="fa fa-clipboard text-inverse"></i> Input SO</a>
+                                <a [routerLink]="['/transaksi/view/',item.id]" *ngIf="level == 'headstore' && item.statusresep != '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'" data-toggle="tooltip" data-original-title="Approval">&nbsp;<i class="fa fa-check text-inverse"></i> Approval</a>
+                                <span *ngIf="level == 'headstore' && item.statusresep == '0'  && jenis =='suratorder' && item.statustransaksi != 'batal'"><i>Sedang Input Resep</i></span>
                             </td>
                         </tr>
                     </tbody>
